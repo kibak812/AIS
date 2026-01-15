@@ -1,31 +1,32 @@
-/* ===== 핸드 영역 프리미엄 ===== */
+/* ===== 핸드 영역 (픽셀 스타일) ===== */
 .hand-area-premium {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 100;
-  padding-bottom: env(safe-area-inset-bottom, 10px);
+  padding-bottom: env(safe-area-inset-bottom, 8px);
   background: linear-gradient(to top,
-    rgba(10, 10, 20, 0.98) 0%,
-    rgba(15, 15, 30, 0.95) 30%,
-    rgba(20, 20, 40, 0.85) 60%,
+    #0a0a12 0%,
+    #0d0d1a 40%,
+    rgba(13, 13, 26, 0.9) 70%,
     transparent 100%
   );
+  font-family: 'Press Start 2P', monospace;
 }
 
-/* ===== 에너지 오브 ===== */
+/* ===== 에너지 오브 (픽셀 스타일) ===== */
 .energy-orb-container {
   position: absolute;
-  top: -55px;
-  left: 16px;
+  top: -50px;
+  left: 12px;
   z-index: 110;
 }
 
 .energy-orb-premium {
   position: relative;
-  width: 70px;
-  height: 70px;
+  width: 56px;
+  height: 56px;
 }
 
 .orb-outer-ring {
@@ -34,113 +35,58 @@
   left: 0;
   right: 0;
   bottom: 0;
-  border: 3px solid transparent;
-  border-radius: 50%;
-  background: linear-gradient(145deg, rgba(243, 156, 18, 0.6), rgba(230, 126, 34, 0.6)) border-box;
-  -webkit-mask:
-    linear-gradient(#fff 0 0) padding-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  animation: orbRingSpin 8s linear infinite;
-}
-
-@keyframes orbRingSpin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  border: 4px solid #f39c12;
+  background: transparent;
 }
 
 .orb-inner {
   position: absolute;
-  top: 5px;
-  left: 5px;
-  right: 5px;
-  bottom: 5px;
-  background: linear-gradient(160deg,
-    #2c3e50 0%,
-    #1a252f 50%,
-    #0d1318 100%
-  );
-  border-radius: 50%;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background: #1a252f;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow:
-    0 0 25px rgba(243, 156, 18, 0.4),
-    inset 0 3px 8px rgba(255, 255, 255, 0.1),
-    inset 0 -3px 8px rgba(0, 0, 0, 0.5);
-  overflow: hidden;
+  border: 2px solid #d68910;
+  box-shadow: inset 3px 3px 0 rgba(0,0,0,0.5);
 }
 
 .orb-glow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at 30% 30%,
-    rgba(243, 156, 18, 0.3) 0%,
-    transparent 50%
-  );
+  display: none;
 }
 
 .orb-content {
   position: relative;
   display: flex;
   align-items: baseline;
-  font-family: 'Segoe UI', system-ui, sans-serif;
   z-index: 2;
 }
 
 .energy-current {
-  font-size: 28px;
-  font-weight: 800;
+  font-size: 16px;
+  font-weight: normal;
   color: #f39c12;
-  text-shadow:
-    0 0 15px rgba(243, 156, 18, 0.8),
-    0 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 2px 2px 0 #000;
+  font-family: 'Press Start 2P', monospace;
 }
 
 .energy-divider {
-  font-size: 18px;
-  color: rgba(255, 255, 255, 0.4);
-  margin: 0 2px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 1px;
+  font-family: 'Press Start 2P', monospace;
 }
 
 .energy-max {
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: 'Press Start 2P', monospace;
 }
 
 .orb-particles {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-}
-
-.orb-particle {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: #f39c12;
-  border-radius: 50%;
-  transform: rotate(var(--angle)) translateY(-25px);
-  animation: orbParticleFloat 3s ease-in-out infinite;
-  animation-delay: var(--delay);
-  box-shadow: 0 0 8px rgba(243, 156, 18, 0.8);
-}
-
-@keyframes orbParticleFloat {
-  0%, 100% {
-    opacity: 0.3;
-    transform: rotate(var(--angle)) translateY(-22px);
-  }
-  50% {
-    opacity: 0.8;
-    transform: rotate(var(--angle)) translateY(-28px);
-  }
+  display: none; /* 픽셀 스타일에서는 파티클 비활성화 */
 }
 
 /* ===== 카드 컨테이너 ===== */
@@ -149,10 +95,10 @@
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  padding: 20px 0 15px;
+  padding: 16px 0 10px;
 }
 
 .hand-container-premium::-webkit-scrollbar {
@@ -161,70 +107,64 @@
 
 .hand-scroll-premium {
   display: flex;
-  gap: 14px;
-  padding: 15px 16px 10px;
+  gap: 10px;
+  padding: 10px 12px 8px;
   min-width: min-content;
 }
 
-/* ===== 프리미엄 카드 ===== */
+/* ===== 픽셀 카드 ===== */
 .card-premium {
   position: relative;
   flex-shrink: 0;
-  width: 115px;
-  height: 160px;
-  border-radius: 14px;
+  width: 100px;
+  height: 140px;
   background: var(--card-bg);
-  border: 3px solid var(--card-border);
+  border: 4px solid var(--card-border);
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  animation: cardDeal 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
-  animation-delay: calc(var(--card-index) * 0.08s);
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.5),
-    0 5px 15px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.1s steps(2);
+  animation: pixelCardDeal 0.3s steps(4) backwards;
+  animation-delay: calc(var(--card-index) * 0.05s);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.6);
   overflow: hidden;
 }
 
-@keyframes cardDeal {
+@keyframes pixelCardDeal {
   0% {
     opacity: 0;
-    transform: translateY(50px) rotateX(-20deg) scale(0.8);
-  }
-  60% {
-    transform: translateY(-10px) rotateX(5deg) scale(1.02);
+    transform: translateY(40px);
   }
   100% {
     opacity: 1;
-    transform: translateY(0) rotateX(0) scale(1);
+    transform: translateY(0);
   }
 }
 
 .card-premium:active:not(.unaffordable):not(.disabled) {
-  transform: translateY(-15px) scale(1.03);
+  transform: translateY(-8px);
+  box-shadow: 6px 10px 0 rgba(0, 0, 0, 0.6);
 }
 
 .card-premium.hovered:not(.unaffordable):not(.disabled) {
-  transform: translateY(-12px) scale(1.02);
-  box-shadow:
-    0 20px 50px rgba(0, 0, 0, 0.6),
-    0 10px 30px rgba(0, 0, 0, 0.4),
-    0 0 30px rgba(255, 255, 255, 0.1);
+  transform: translateY(-6px);
+  box-shadow: 6px 8px 0 rgba(0, 0, 0, 0.6);
 }
 
 .card-premium.selected {
-  transform: translateY(-25px) scale(1.08);
+  transform: translateY(-16px);
   border-color: #ffd700;
-  box-shadow:
-    0 25px 60px rgba(255, 215, 0, 0.3),
-    0 0 40px rgba(255, 215, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 0 2px #ffd700, 6px 12px 0 rgba(0, 0, 0, 0.6);
   z-index: 10;
+  animation: pixelSelectedPulse 0.5s steps(2) infinite;
+}
+
+@keyframes pixelSelectedPulse {
+  0%, 100% { border-color: #ffd700; }
+  50% { border-color: #ffaa00; }
 }
 
 .card-premium.unaffordable {
   opacity: 0.5;
-  filter: grayscale(0.7) brightness(0.6);
+  filter: grayscale(0.8);
   cursor: not-allowed;
 }
 
@@ -232,186 +172,134 @@
   pointer-events: none;
 }
 
-/* ===== 카드 광택 ===== */
+/* ===== 카드 광택 (비활성화) ===== */
 .card-shine {
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 60%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.15),
-    transparent
-  );
-  transform: skewX(-20deg);
-  pointer-events: none;
+  display: none;
 }
 
-.card-premium.hovered .card-shine,
-.card-premium.selected .card-shine {
-  animation: shineSwipe 0.6s ease-out;
-}
-
-@keyframes shineSwipe {
-  to { left: 150%; }
-}
-
-/* ===== 코스트 보석 ===== */
+/* ===== 코스트 표시 (픽셀 스타일) ===== */
 .cost-gem {
   position: absolute;
-  top: -10px;
-  left: -10px;
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(160deg,
-    #f39c12 0%,
-    #d68910 50%,
-    #b9770e 100%
-  );
-  border-radius: 50%;
+  top: -4px;
+  left: -4px;
+  width: 28px;
+  height: 28px;
+  background: #f39c12;
+  border: 3px solid #d68910;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 5;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  box-shadow:
-    0 4px 15px rgba(243, 156, 18, 0.5),
-    inset 0 2px 4px rgba(255, 255, 255, 0.4),
-    inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
 }
 
 .cost-gem.depleted {
-  background: linear-gradient(160deg,
-    #7f8c8d 0%,
-    #616a6b 50%,
-    #424949 100%
-  );
-  box-shadow:
-    0 4px 10px rgba(0, 0, 0, 0.3),
-    inset 0 2px 4px rgba(255, 255, 255, 0.1);
+  background: #566573;
+  border-color: #424949;
 }
 
 .gem-glow {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  width: 12px;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 50%;
-  filter: blur(2px);
-}
-
-.cost-gem.depleted .gem-glow {
-  opacity: 0.3;
+  display: none;
 }
 
 .gem-value {
-  font-size: 20px;
-  font-weight: 800;
+  font-size: 12px;
+  font-weight: normal;
   color: #fff;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.8);
+  font-family: 'Press Start 2P', monospace;
 }
 
-/* ===== 희귀도 배지 ===== */
+/* ===== 희귀도 배지 (픽셀 스타일) ===== */
 .rarity-badge {
   position: absolute;
-  top: -8px;
-  right: -8px;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+  top: -4px;
+  right: -4px;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 10px;
   z-index: 5;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+  border: 2px solid;
 }
 
 .rarity-badge.uncommon {
-  background: linear-gradient(145deg, #5dade2, #2980b9);
+  background: #3498db;
+  border-color: #2471a3;
   color: #fff;
 }
 
 .rarity-badge.rare {
-  background: linear-gradient(145deg, #ffd700, #f39c12);
-  color: #fff;
-  animation: raritySparkle 2s ease-in-out infinite;
+  background: #ffd700;
+  border-color: #d4ac0d;
+  color: #000;
+  animation: pixelRarityBlink 0.8s steps(2) infinite;
 }
 
-@keyframes raritySparkle {
-  0%, 100% { filter: brightness(1); }
-  50% { filter: brightness(1.3); }
+@keyframes pixelRarityBlink {
+  0%, 100% { background: #ffd700; }
+  50% { background: #ffec00; }
 }
 
-/* ===== 카드 프레임 ===== */
+/* ===== 카드 프레임 (픽셀 스타일) ===== */
 .card-frame {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 14px 10px 10px;
+  padding: 12px 8px 8px;
   position: relative;
 }
 
 .frame-ornament {
   position: absolute;
-  left: 15%;
-  right: 15%;
-  height: 1px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.4) 30%,
-    rgba(255, 255, 255, 0.6) 50%,
-    rgba(255, 255, 255, 0.4) 70%,
-    transparent 100%
-  );
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .frame-ornament.top {
-  top: 10px;
+  top: 8px;
 }
 
 .frame-ornament.bottom {
-  bottom: 8px;
+  bottom: 6px;
 }
 
-/* ===== 카드 헤더 ===== */
+/* ===== 카드 헤더 (픽셀 스타일) ===== */
 .card-header-premium {
   display: flex;
   align-items: center;
-  gap: 5px;
-  margin-bottom: 6px;
-  padding-left: 22px;
+  gap: 4px;
+  margin-bottom: 4px;
+  padding-left: 18px;
 }
 
 .card-icon {
-  font-size: 14px;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+  font-size: 10px;
+  filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.8));
 }
 
 .card-title {
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 7px;
+  font-weight: normal;
   color: #fff;
-  text-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.8),
-    0 0 10px rgba(255, 255, 255, 0.2);
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.9);
+  font-family: 'Press Start 2P', monospace;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.4;
 }
 
-/* ===== 카드 아트 영역 ===== */
+/* ===== 카드 아트 영역 (픽셀 스타일) ===== */
 .card-art-area {
-  height: 35px;
-  margin-bottom: 6px;
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.3);
+  height: 32px;
+  margin-bottom: 4px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -422,174 +310,143 @@
   width: 100%;
   height: 100%;
   background:
-    radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 60%),
     repeating-linear-gradient(
       45deg,
       transparent,
       transparent 4px,
-      rgba(255, 255, 255, 0.03) 4px,
-      rgba(255, 255, 255, 0.03) 8px
+      rgba(255, 255, 255, 0.05) 4px,
+      rgba(255, 255, 255, 0.05) 8px
     );
 }
 
-/* ===== 카드 설명 ===== */
+/* ===== 카드 설명 (픽셀 스타일) ===== */
 .card-description-premium {
   flex: 1;
-  font-size: 11px;
+  font-size: 6px;
   color: rgba(255, 255, 255, 0.95);
   text-align: center;
-  line-height: 1.4;
-  padding: 4px;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  line-height: 1.5;
+  padding: 2px;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Press Start 2P', monospace;
 }
 
-/* ===== 타입 태그 ===== */
+/* ===== 타입 태그 (픽셀 스타일) ===== */
 .card-type-tag {
-  padding-top: 6px;
+  padding-top: 4px;
   text-align: center;
 }
 
 .card-type-tag span {
   display: inline-block;
-  padding: 3px 12px;
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 10px;
-  font-size: 10px;
+  padding: 2px 8px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 5px;
   color: rgba(255, 255, 255, 0.8);
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  font-weight: 600;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  letter-spacing: 1px;
+  font-family: 'Press Start 2P', monospace;
 }
 
-/* ===== 선택 오라 ===== */
+/* ===== 선택 오라 (픽셀 스타일) ===== */
 .selection-aura {
-  position: absolute;
-  top: -8px;
-  left: -8px;
-  right: -8px;
-  bottom: -8px;
-  pointer-events: none;
+  display: none; /* 픽셀 스타일에서는 오라 대신 테두리 색상으로 표시 */
 }
 
-.aura-ring {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 20px;
-  border: 2px solid rgba(255, 215, 0, 0.6);
-  box-shadow:
-    0 0 30px rgba(255, 215, 0, 0.5),
-    inset 0 0 20px rgba(255, 215, 0, 0.2);
-  animation: auraRingPulse 1.5s ease-in-out infinite;
-}
-
-@keyframes auraRingPulse {
-  0%, 100% {
-    opacity: 0.6;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.02);
-  }
-}
-
-/* ===== 스크롤 인디케이터 ===== */
+/* ===== 스크롤 인디케이터 (픽셀 스타일) ===== */
 .scroll-indicator {
   position: absolute;
-  bottom: 8px;
+  bottom: 4px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 5px 14px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 15px;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  font-size: 6px;
+  color: rgba(255, 255, 255, 0.6);
   pointer-events: none;
-  animation: scrollFade 2.5s ease-in-out infinite;
+  animation: pixelScrollBlink 1.5s steps(2) infinite;
+  font-family: 'Press Start 2P', monospace;
 }
 
 .scroll-arrow {
-  font-size: 14px;
+  font-size: 8px;
   font-weight: bold;
-  animation: arrowBounce 1.5s ease-in-out infinite;
+  animation: pixelArrowBounce 1s steps(2) infinite;
 }
 
 .scroll-arrow.left {
   animation-direction: reverse;
 }
 
-@keyframes arrowBounce {
+@keyframes pixelArrowBounce {
   0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(4px); }
+  50% { transform: translateX(2px); }
 }
 
-@keyframes scrollFade {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
+@keyframes pixelScrollBlink {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
 }
 
 /* ===== 반응형 ===== */
 @media (max-width: 360px) {
   .card-premium {
-    width: 100px;
-    height: 140px;
+    width: 85px;
+    height: 120px;
   }
 
   .card-title {
-    font-size: 12px;
+    font-size: 6px;
   }
 
   .card-description-premium {
-    font-size: 10px;
+    font-size: 5px;
   }
 
   .hand-scroll-premium {
-    gap: 10px;
-    padding: 10px 12px 8px;
+    gap: 8px;
+    padding: 8px 10px 6px;
   }
 
   .energy-orb-premium {
-    width: 60px;
-    height: 60px;
+    width: 48px;
+    height: 48px;
   }
 
   .energy-current {
-    font-size: 24px;
+    font-size: 14px;
   }
 
   .cost-gem {
-    width: 35px;
-    height: 35px;
+    width: 24px;
+    height: 24px;
   }
 
   .gem-value {
-    font-size: 18px;
+    font-size: 10px;
   }
 }
 
 @media (min-width: 500px) {
   .card-premium {
-    width: 130px;
-    height: 180px;
+    width: 110px;
+    height: 155px;
   }
 
   .card-title {
-    font-size: 14px;
+    font-size: 8px;
   }
 
   .card-description-premium {
-    font-size: 12px;
+    font-size: 7px;
   }
 
   .hand-scroll-premium {
@@ -597,6 +454,6 @@
   }
 
   .card-art-area {
-    height: 45px;
+    height: 40px;
   }
 }

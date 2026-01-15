@@ -3,15 +3,27 @@ import type { Card } from '../types';
 import { generateAICard, generateAICardWithPrompt } from '../aiCardGenerator';
 import './DeckManagementScreen.css';
 
+// 비용 상수
+const CARD_REMOVE_HP_COST = 5;
+const AI_CARD_HP_COST = 10;
+const MAX_REMOVES_PER_FLOOR = 1;
+const MAX_AI_CARDS_PER_FLOOR = 1;
+
 interface DeckManagementScreenProps {
   deck: Card[];
-  onRemoveCard: (cardId: string) => void;
-  onAddAICard: (card: Card) => void;
+  playerHp: number;
+  cardsRemovedThisFloor: number;
+  aiCardsGeneratedThisFloor: number;
+  onRemoveCard: (cardId: string, hpCost: number) => void;
+  onAddAICard: (card: Card, hpCost: number) => void;
   onComplete: () => void;
 }
 
 function DeckManagementScreen({
   deck,
+  playerHp,
+  cardsRemovedThisFloor,
+  aiCardsGeneratedThisFloor,
   onRemoveCard,
   onAddAICard,
   onComplete,
@@ -22,7 +34,12 @@ function DeckManagementScreen({
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'deck' | 'ai'>('deck');
 
+  const canRemoveCard = cardsRemovedThisFloor < MAX_REMOVES_PER_FLOOR && playerHp > CARD_REMOVE_HP_COST;
+  const canGenerateAI = aiCardsGeneratedThisFloor < MAX_AI_CARDS_PER_FLOOR && playerHp > AI_CARD_HP_COST;
+
   const handleGenerateCard = () => {
+    if (!canGenerateAI) return;
+
     setIsGenerating(true);
     setTimeout(() => {
       const card = aiPrompt.trim()
@@ -34,8 +51,8 @@ function DeckManagementScreen({
   };
 
   const handleAcceptCard = () => {
-    if (generatedCard) {
-      onAddAICard(generatedCard);
+    if (generatedCard && canGenerateAI) {
+      onAddAICard(generatedCard, AI_CARD_HP_COST);
       setGeneratedCard(null);
       setAiPrompt('');
     }
@@ -46,20 +63,20 @@ function DeckManagementScreen({
   };
 
   const handleRemoveCard = () => {
-    if (selectedCardId) {
-      onRemoveCard(selectedCardId);
+    if (selectedCardId && canRemoveCard) {
+      onRemoveCard(selectedCardId, CARD_REMOVE_HP_COST);
       setSelectedCardId(null);
     }
   };
 
   const getCardGradient = (type: string, rarity: string): string => {
     if (rarity === 'rare') {
-      return 'linear-gradient(160deg, #ffd700 0%, #ff8c00 50%, #cc4400 100%)';
+      return '#4a3520';
     }
     const gradients: { [key: string]: string } = {
-      attack: 'linear-gradient(160deg, #ff6b6b 0%, #dc4444 50%, #a02020 100%)',
-      skill: 'linear-gradient(160deg, #5dade2 0%, #1abc9c 50%, #0e6655 100%)',
-      power: 'linear-gradient(160deg, #bb8fce 0%, #9b59b6 50%, #5b2c6f 100%)',
+      attack: '#8b2020',
+      skill: '#206050',
+      power: '#402060',
     };
     return gradients[type] || gradients.attack;
   };
@@ -93,7 +110,7 @@ function DeckManagementScreen({
       {/* 헤더 */}
       <div className="dm-header">
         <h1 className="dm-title">덱 정비소</h1>
-        <p className="dm-subtitle">카드를 정리하거나 AI로 새 카드를 생성하세요</p>
+        <p className="dm-subtitle">HP를 소모하여 덱을 수정할 수 있습니다 (층당 제한 있음)</p>
       </div>
 
       {/* 탭 네비게이션 */}
@@ -110,7 +127,7 @@ function DeckManagementScreen({
           onClick={() => setActiveTab('ai')}
         >
           <span className="tab-icon">🤖</span>
-          <span>AI 카드 생성</span>
+          <span>AI 생성</span>
         </button>
       </div>
 
@@ -150,11 +167,27 @@ function DeckManagementScreen({
             {/* 카드 제거 버튼 */}
             {selectedCardId && (
               <div className="dm-action-panel">
-                <button className="dm-remove-btn" onClick={handleRemoveCard}>
-                  <span>🗑️</span>
-                  <span>선택한 카드 제거</span>
-                </button>
-                <p className="dm-warning">제거된 카드는 복구할 수 없습니다</p>
+                {canRemoveCard ? (
+                  <>
+                    <button className="dm-remove-btn" onClick={handleRemoveCard}>
+                      <span>🗑️</span>
+                      <span>카드 제거 (HP -{CARD_REMOVE_HP_COST})</span>
+                    </button>
+                    <p className="dm-cost-info">현재 HP: {playerHp} | 남은 제거 횟수: {MAX_REMOVES_PER_FLOOR - cardsRemovedThisFloor}</p>
+                  </>
+                ) : (
+                  <>
+                    <button className="dm-remove-btn" style={{ opacity: 0.5, cursor: 'not-allowed' }} disabled>
+                      <span>🗑️</span>
+                      <span>제거 불가</span>
+                    </button>
+                    <p className="dm-warning">
+                      {cardsRemovedThisFloor >= MAX_REMOVES_PER_FLOOR
+                        ? '이번 층에서 이미 카드를 제거했습니다'
+                        : 'HP가 부족합니다'}
+                    </p>
+                  </>
+                )}
               </div>
             )}
           </div>
@@ -162,31 +195,38 @@ function DeckManagementScreen({
           <div className="dm-ai-view">
             {/* AI 프롬프트 입력 */}
             <div className="dm-ai-input-section">
-              <label className="dm-ai-label">카드 컨셉 입력 (선택사항)</label>
+              <label className="dm-ai-label">
+                카드 컨셉 (HP -{AI_CARD_HP_COST}) | 남은 횟수: {MAX_AI_CARDS_PER_FLOOR - aiCardsGeneratedThisFloor}
+              </label>
               <div className="dm-ai-input-wrapper">
                 <input
                   type="text"
                   className="dm-ai-input"
-                  placeholder="예: 강력한 공격 카드, 방어와 회복을 동시에..."
+                  placeholder="예: 강력한 공격, 방어와 회복..."
                   value={aiPrompt}
                   onChange={(e) => setAiPrompt(e.target.value)}
-                  disabled={isGenerating}
+                  disabled={isGenerating || !canGenerateAI}
                 />
               </div>
               <button
                 className={`dm-generate-btn ${isGenerating ? 'generating' : ''}`}
                 onClick={handleGenerateCard}
-                disabled={isGenerating}
+                disabled={isGenerating || !canGenerateAI}
               >
                 {isGenerating ? (
                   <>
                     <span className="spinner" />
                     <span>생성 중...</span>
                   </>
-                ) : (
+                ) : canGenerateAI ? (
                   <>
                     <span>🎲</span>
-                    <span>AI 카드 생성</span>
+                    <span>AI 생성 (HP -{AI_CARD_HP_COST})</span>
+                  </>
+                ) : (
+                  <>
+                    <span>🚫</span>
+                    <span>{aiCardsGeneratedThisFloor >= MAX_AI_CARDS_PER_FLOOR ? '사용 완료' : 'HP 부족'}</span>
                   </>
                 )}
               </button>
@@ -220,11 +260,11 @@ function DeckManagementScreen({
                 <div className="dm-card-actions">
                   <button className="dm-accept-btn" onClick={handleAcceptCard}>
                     <span>✓</span>
-                    <span>덱에 추가</span>
+                    <span>추가 (HP -{AI_CARD_HP_COST})</span>
                   </button>
                   <button className="dm-reject-btn" onClick={handleRejectCard}>
                     <span>✗</span>
-                    <span>다시 생성</span>
+                    <span>취소</span>
                   </button>
                 </div>
               </div>
@@ -234,8 +274,8 @@ function DeckManagementScreen({
             <div className="dm-ai-info">
               <div className="dm-info-icon">💡</div>
               <div className="dm-info-text">
-                <p>AI가 다양한 효과와 수치를 조합하여 독특한 카드를 생성합니다.</p>
-                <p>원하는 스타일을 입력하면 맞춤형 카드를 받을 수 있습니다.</p>
+                <p>AI 카드 생성은 층당 {MAX_AI_CARDS_PER_FLOOR}회 가능합니다.</p>
+                <p>HP {AI_CARD_HP_COST}를 소모합니다. 신중히 사용하세요!</p>
               </div>
             </div>
           </div>
@@ -245,7 +285,7 @@ function DeckManagementScreen({
       {/* 완료 버튼 */}
       <div className="dm-footer">
         <button className="dm-complete-btn" onClick={onComplete}>
-          <span>전투 계속하기</span>
+          <span>전투 계속</span>
           <span className="btn-arrow">→</span>
         </button>
       </div>

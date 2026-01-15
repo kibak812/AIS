@@ -79,6 +79,9 @@ export interface GameState {
   turnCount: number;
   rewardCards?: Card[];
   aiGeneratedCard?: Card;
+  deckManagementUsedThisFloor: boolean;
+  cardsRemovedThisFloor: number;
+  aiCardsGeneratedThisFloor: number;
 }
 
 // AI 카드 생성 관련 타입
