@@ -36,7 +36,7 @@
 }
 
 .avatar-icon {
-  font-size: 20px;
+  font-size: 26px;
   filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.8));
 }
 
@@ -61,11 +61,11 @@
 }
 
 .shield-overlay .shield-icon {
-  font-size: 10px;
+  font-size: 14px;
 }
 
 .shield-overlay .shield-value {
-  font-size: 8px;
+  font-size: 12px;
   font-weight: normal;
   color: #fff;
   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.8);
@@ -143,21 +143,21 @@
 }
 
 .current-hp {
-  font-size: 10px;
+  font-size: 14px;
   font-weight: normal;
   color: #fff;
   font-family: 'Press Start 2P', monospace;
 }
 
 .hp-divider {
-  font-size: 8px;
+  font-size: 12px;
   color: rgba(255, 255, 255, 0.5);
   margin: 0 1px;
   font-family: 'Press Start 2P', monospace;
 }
 
 .max-hp {
-  font-size: 8px;
+  font-size: 12px;
   font-weight: normal;
   color: rgba(255, 255, 255, 0.7);
   font-family: 'Press Start 2P', monospace;
@@ -180,11 +180,11 @@
 }
 
 .player-status-chip .status-icon {
-  font-size: 10px;
+  font-size: 14px;
 }
 
 .player-status-chip .status-value {
-  font-size: 8px;
+  font-size: 12px;
   font-weight: normal;
   color: var(--status-color);
   text-shadow: 1px 1px 0 #000;
@@ -194,28 +194,28 @@
 /* ===== 반응형 ===== */
 @media (max-width: 400px) {
   .player-avatar {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
   }
 
   .avatar-icon {
-    font-size: 16px;
+    font-size: 22px;
   }
 
   .health-bar-premium {
-    width: 100px;
+    width: 110px;
   }
 
   .health-bg {
-    height: 18px;
+    height: 22px;
   }
 
   .current-hp {
-    font-size: 8px;
+    font-size: 12px;
   }
 
   .max-hp {
-    font-size: 6px;
+    font-size: 10px;
   }
 
   .shield-overlay {
@@ -223,6 +223,6 @@
   }
 
   .shield-overlay .shield-value {
-    font-size: 6px;
+    font-size: 10px;
   }
 }

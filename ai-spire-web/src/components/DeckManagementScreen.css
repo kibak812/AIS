@@ -58,7 +58,7 @@
 }
 
 .dm-title {
-  font-size: 20px;
+  font-size: 28px;
   font-weight: normal;
   color: #fff;
   text-shadow: 3px 3px 0 #4b0082;
@@ -67,7 +67,7 @@
 }
 
 .dm-subtitle {
-  font-size: 8px;
+  font-size: 12px;
   color: rgba(255, 255, 255, 0.6);
   margin: 0;
   font-family: 'Press Start 2P', monospace;
@@ -89,7 +89,7 @@
   align-items: center;
   gap: 6px;
   padding: 10px 16px;
-  font-size: 8px;
+  font-size: 12px;
   font-weight: normal;
   color: rgba(255, 255, 255, 0.6);
   background: rgba(255, 255, 255, 0.05);
@@ -112,7 +112,7 @@
 }
 
 .tab-icon {
-  font-size: 12px;
+  font-size: 16px;
 }
 
 /* ===== 컨텐츠 영역 ===== */
@@ -173,14 +173,14 @@
   position: absolute;
   top: -4px;
   left: -4px;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   background: #f39c12;
   border: 3px solid #d68910;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
+  font-size: 14px;
   font-weight: normal;
   color: #fff;
   font-family: 'Press Start 2P', monospace;
@@ -191,12 +191,12 @@
   position: absolute;
   top: -4px;
   right: -4px;
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 8px;
+  font-size: 12px;
   border: 2px solid;
 }
 
@@ -221,7 +221,7 @@
 }
 
 .dm-card-name {
-  font-size: 7px;
+  font-size: 11px;
   font-weight: normal;
   color: #fff;
   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.8);
@@ -234,7 +234,7 @@
 
 .dm-card-desc {
   flex: 1;
-  font-size: 6px;
+  font-size: 10px;
   color: rgba(255, 255, 255, 0.9);
   text-align: center;
   line-height: 1.6;
@@ -250,7 +250,7 @@
 }
 
 .dm-card-type {
-  font-size: 5px;
+  font-size: 9px;
   color: rgba(255, 255, 255, 0.7);
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -279,7 +279,7 @@
   align-items: center;
   gap: 6px;
   padding: 10px 20px;
-  font-size: 8px;
+  font-size: 12px;
   font-weight: normal;
   color: #fff;
   background: #c0392b;
@@ -297,7 +297,7 @@
 }
 
 .dm-warning {
-  font-size: 6px;
+  font-size: 10px;
   color: rgba(255, 255, 255, 0.5);
   margin: 0;
   font-family: 'Press Start 2P', monospace;
@@ -305,7 +305,7 @@
 
 /* ===== 비용 표시 ===== */
 .dm-cost-info {
-  font-size: 7px;
+  font-size: 11px;
   color: #ff4757;
   margin: 0;
   font-family: 'Press Start 2P', monospace;
@@ -327,7 +327,7 @@
 }
 
 .dm-ai-label {
-  font-size: 8px;
+  font-size: 12px;
   font-weight: normal;
   color: rgba(255, 255, 255, 0.8);
   font-family: 'Press Start 2P', monospace;
@@ -340,7 +340,7 @@
 .dm-ai-input {
   width: 100%;
   padding: 12px 14px;
-  font-size: 10px;
+  font-size: 14px;
   color: #fff;
   background: rgba(255, 255, 255, 0.1);
   border: 3px solid rgba(255, 255, 255, 0.2);
@@ -357,7 +357,7 @@
 .dm-ai-input::placeholder {
   color: rgba(255, 255, 255, 0.4);
   font-family: 'Press Start 2P', monospace;
-  font-size: 7px;
+  font-size: 11px;
 }
 
 .dm-generate-btn {
@@ -366,7 +366,7 @@
   justify-content: center;
   gap: 8px;
   padding: 12px 24px;
-  font-size: 10px;
+  font-size: 14px;
   font-weight: normal;
   color: #fff;
   background: #8e44ad;
@@ -413,7 +413,7 @@
 }
 
 .dm-section-title {
-  font-size: 10px;
+  font-size: 14px;
   font-weight: normal;
   color: #fff;
   margin: 0;
@@ -458,7 +458,7 @@
   align-items: center;
   gap: 4px;
   padding: 10px 16px;
-  font-size: 8px;
+  font-size: 12px;
   font-weight: normal;
   border: 3px solid;
   cursor: pointer;
@@ -501,12 +501,12 @@
 }
 
 .dm-info-icon {
-  font-size: 16px;
+  font-size: 20px;
   flex-shrink: 0;
 }
 
 .dm-info-text {
-  font-size: 6px;
+  font-size: 10px;
   color: rgba(255, 255, 255, 0.7);
   line-height: 1.8;
   font-family: 'Press Start 2P', monospace;
@@ -541,8 +541,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 32px;
-  font-size: 10px;
+  padding: 14px 36px;
+  font-size: 14px;
   font-weight: normal;
   color: #fff;
   background: #3498db;
@@ -560,7 +560,7 @@
 }
 
 .btn-arrow {
-  font-size: 12px;
+  font-size: 16px;
   transition: transform 0.1s steps(2);
 }
 
@@ -571,7 +571,7 @@
 /* ===== 반응형 ===== */
 @media (max-width: 400px) {
   .dm-title {
-    font-size: 16px;
+    font-size: 22px;
   }
 
   .dm-tabs {
@@ -582,6 +582,7 @@
 
   .dm-tab {
     justify-content: center;
+    font-size: 10px;
   }
 
   .dm-card-grid {
@@ -595,11 +596,11 @@
   }
 
   .dm-card-name {
-    font-size: 6px;
+    font-size: 9px;
   }
 
   .dm-card-desc {
-    font-size: 5px;
+    font-size: 8px;
   }
 
   .dm-generated-card {
