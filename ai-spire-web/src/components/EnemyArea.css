@@ -59,11 +59,11 @@
 }
 
 .intent-icon {
-  font-size: 18px;
+  font-size: 24px;
 }
 
 .intent-value {
-  font-size: 14px;
+  font-size: 18px;
   font-weight: normal;
   color: var(--intent-color);
   text-shadow: 2px 2px 0 #000;
@@ -195,7 +195,7 @@
 }
 
 .name-text {
-  font-size: 10px;
+  font-size: 14px;
   font-weight: normal;
   color: #fff;
   text-shadow: 2px 2px 0 #000;
@@ -265,7 +265,7 @@
   display: flex;
   align-items: center;
   gap: 2px;
-  font-size: 10px;
+  font-size: 14px;
   font-weight: normal;
   color: #fff;
   text-shadow: 1px 1px 0 #000;
@@ -282,7 +282,7 @@
 }
 
 .shield-icon {
-  font-size: 8px;
+  font-size: 12px;
 }
 
 .hp-value {
@@ -316,11 +316,11 @@
 }
 
 .status-icon {
-  font-size: 10px;
+  font-size: 14px;
 }
 
 .status-value {
-  font-size: 8px;
+  font-size: 12px;
   font-weight: normal;
   color: var(--status-color);
   text-shadow: 1px 1px 0 #000;
@@ -339,7 +339,7 @@
   }
 
   .enemy-card-premium {
-    width: 120px;
+    width: 130px;
     padding: 10px 8px 8px;
   }
 
@@ -348,22 +348,22 @@
   }
 
   .name-text {
-    font-size: 7px;
+    font-size: 11px;
   }
 
   .health-bar-bg {
-    height: 16px;
+    height: 20px;
   }
 
   .health-text {
-    font-size: 6px;
+    font-size: 10px;
   }
 
   .intent-icon {
-    font-size: 12px;
+    font-size: 18px;
   }
 
   .intent-value {
-    font-size: 10px;
+    font-size: 14px;
   }
 }
