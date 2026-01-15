@@ -71,7 +71,7 @@ function App() {
           }, i * 100);
         });
       } else if (effect.type === 'block') {
-        showCombatEffect('block', effect.amount, 'player', 85, 15);
+        showCombatEffect('block', effect.amount, 'player', 50, 72);
       }
     });
 
@@ -107,17 +107,17 @@ function App() {
 
           // 방어로 막은 양 표시 (있을 경우)
           if (blockedAmount > 0) {
-            showCombatEffect('blocked', blockedAmount, 'player', 75, 12);
+            showCombatEffect('blocked', blockedAmount, 'player', 40, 72);
           }
           // 실제 받은 피해 표시
           if (actualDamage > 0) {
             setTimeout(() => {
-              showCombatEffect('actual_damage', actualDamage, 'player', 85, 18);
+              showCombatEffect('actual_damage', actualDamage, 'player', 60, 72);
             }, 150);
           } else if (blockedAmount > 0 && actualDamage === 0) {
             // 완전 방어 시
             setTimeout(() => {
-              showCombatEffect('block', 0, 'player', 85, 18);
+              showCombatEffect('block', 0, 'player', 50, 72);
             }, 150);
           }
 

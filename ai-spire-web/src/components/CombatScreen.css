@@ -552,7 +552,7 @@
 }
 
 /* ===== 반응형 ===== */
-@media (max-width: 400px) {
+@media (max-width: 480px) {
   .combat-footer {
     bottom: 140px;
     padding: 0 8px;
@@ -560,12 +560,30 @@
     gap: 8px;
   }
 
+  /* 상단 행: 에너지 + 덱 더미 + 설정 버튼 + 턴 종료 버튼 */
   .footer-left {
     gap: 6px;
+    flex-shrink: 0;
+    order: 1;
+  }
+
+  .end-turn-button {
+    padding: 10px 14px;
+    font-size: 11px;
+    flex-shrink: 0;
+    order: 2;
+    margin-left: auto;
+  }
+
+  /* 하단 행: 체력바 (전체 너비) */
+  .player-health-inline {
+    order: 3;
+    width: 100%;
+    justify-content: center;
   }
 
   .energy-orb-inline {
-    padding: 6px 8px;
+    padding: 5px 8px;
   }
 
   .energy-orb-inline .energy-current {
@@ -574,11 +592,11 @@
 
   .energy-orb-inline .energy-divider,
   .energy-orb-inline .energy-max {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .health-bar-inline {
-    width: 100px;
+    width: 120px;
     height: 24px;
   }
 
@@ -591,29 +609,26 @@
     padding: 4px 8px;
   }
 
-  .end-turn-button {
-    padding: 10px 16px;
-    font-size: 12px;
-  }
-
   .deck-pile {
-    width: 32px;
-    height: 42px;
-  }
-
-  .pile-count {
-    min-width: 18px;
-    height: 18px;
-    font-size: 10px;
-  }
-
-  .deck-management-btn {
-    width: 36px;
+    width: 28px;
     height: 36px;
   }
 
+  .pile-count {
+    min-width: 16px;
+    height: 16px;
+    font-size: 9px;
+    bottom: -4px;
+    right: -4px;
+  }
+
+  .deck-management-btn {
+    width: 32px;
+    height: 32px;
+  }
+
   .dm-icon {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .floor-badge {
@@ -634,11 +649,5 @@
 
   .hint-text {
     font-size: 12px;
-  }
-
-  .player-health-inline {
-    order: 2;
-    width: 100%;
-    justify-content: center;
   }
 }
