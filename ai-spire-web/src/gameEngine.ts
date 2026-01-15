@@ -174,17 +174,20 @@ export function playCard(
   let newState = { ...state };
   let player = { ...newState.player };
 
+  // Apply card cost and remove from hand first
   player.energy -= card.cost;
   player.hand = player.hand.filter((c) => c.id !== cardId);
   player.discardPile = [...player.discardPile, card];
 
+  // Update state with new player before applying effects
+  newState.player = player;
+
+  // Apply card effects
   for (const effect of card.effects) {
     newState = applyCardEffect(newState, effect, targetEnemyId);
   }
 
-  player = newState.player;
-  newState.player = player;
-
+  // Remove dead enemies
   newState.enemies = newState.enemies.filter((e) => e.currentHp > 0);
 
   return newState;

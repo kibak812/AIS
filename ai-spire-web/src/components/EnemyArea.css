@@ -12,7 +12,7 @@
   position: relative;
   width: 140px;
   padding: 15px;
-  background: linear-gradient(135deg, rgba(139, 0, 0, 0.8) 0%, rgba(178, 34, 34, 0.8) 100%);
+  background: linear-gradient(135deg, rgba(139, 0, 0, 0.9) 0%, rgba(178, 34, 34, 0.9) 100%);
   border-radius: 15px;
   border: 3px solid rgba(255, 255, 255, 0.3);
   display: flex;
@@ -21,16 +21,51 @@
   gap: 10px;
   transition: all 0.3s ease;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  animation: enemyAppear 0.4s ease;
+}
+
+@keyframes enemyAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.enemy-card:hover {
+  transform: scale(1.05);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .enemy-card:active {
-  transform: scale(0.95);
+  transform: scale(0.98);
 }
 
 .enemy-card.selected {
   border-color: #ffd700;
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+  box-shadow:
+    0 0 25px rgba(255, 215, 0, 0.7),
+    0 0 40px rgba(255, 215, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  animation: enemySelected 0.5s ease;
+}
+
+@keyframes enemySelected {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
 }
 
 .enemy-intent {
