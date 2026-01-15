@@ -174,17 +174,20 @@ export function playCard(
   let newState = { ...state };
   let player = { ...newState.player };
 
+  // 에너지 소모 및 카드 버리기
   player.energy -= card.cost;
   player.hand = player.hand.filter((c) => c.id !== cardId);
   player.discardPile = [...player.discardPile, card];
 
+  // 먼저 player 변경사항 반영
+  newState.player = player;
+
+  // 카드 효과 적용
   for (const effect of card.effects) {
     newState = applyCardEffect(newState, effect, targetEnemyId);
   }
 
-  player = newState.player;
-  newState.player = player;
-
+  // 죽은 적 제거
   newState.enemies = newState.enemies.filter((e) => e.currentHp > 0);
 
   return newState;
