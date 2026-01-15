@@ -5,13 +5,13 @@ import './HandArea.css';
 interface HandAreaProps {
   hand: Card[];
   energy: number;
-  maxEnergy: number;
+  maxEnergy?: number; // 더 이상 HandArea에서 직접 표시하지 않음
   selectedCardId: string | null;
   onSelectCard: (cardId: string) => void;
   disabled: boolean;
 }
 
-function HandArea({ hand, energy, maxEnergy, selectedCardId, onSelectCard, disabled }: HandAreaProps) {
+function HandArea({ hand, energy, selectedCardId, onSelectCard, disabled }: HandAreaProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
 
@@ -84,29 +84,6 @@ function HandArea({ hand, energy, maxEnergy, selectedCardId, onSelectCard, disab
 
   return (
     <div className="hand-area-premium">
-      {/* 에너지 오브 */}
-      <div className="energy-orb-container">
-        <div className="energy-orb-premium">
-          <div className="orb-outer-ring" />
-          <div className="orb-inner">
-            <div className="orb-glow" />
-            <div className="orb-content">
-              <span className="energy-current">{energy}</span>
-              <span className="energy-divider">/</span>
-              <span className="energy-max">{maxEnergy}</span>
-            </div>
-            <div className="orb-particles">
-              {[...Array(8)].map((_, i) => (
-                <div key={i} className="orb-particle" style={{
-                  '--angle': `${i * 45}deg`,
-                  '--delay': `${i * 0.2}s`,
-                } as React.CSSProperties} />
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* 카드 컨테이너 */}
       <div className="hand-container-premium" ref={containerRef}>
         <div className="hand-scroll-premium">
@@ -163,11 +140,6 @@ function HandArea({ hand, energy, maxEnergy, selectedCardId, onSelectCard, disab
                   <div className="card-header-premium">
                     <span className="card-icon">{getCardIcon(card.type)}</span>
                     <span className="card-title">{card.name}</span>
-                  </div>
-
-                  {/* 카드 아트 영역 */}
-                  <div className="card-art-area">
-                    <div className="art-pattern" />
                   </div>
 
                   {/* 설명 영역 */}
