@@ -1,6 +1,5 @@
 import type { GameState } from '../types';
 import './CombatScreen.css';
-import PlayerInfo from './PlayerInfo';
 import EnemyArea from './EnemyArea';
 import HandArea from './HandArea';
 
@@ -87,7 +86,6 @@ function CombatScreen({
           <span className="floor-label">FLOOR</span>
           <span className="floor-number">{gameState.floor}</span>
         </div>
-        <PlayerInfo player={gameState.player} isHit={playerHit} />
       </div>
 
       {/* 적 영역 */}
@@ -103,6 +101,13 @@ function CombatScreen({
       {/* 하단 컨트롤 */}
       <div className="combat-footer">
         <div className="footer-left">
+          {/* 에너지 오브 */}
+          <div className="energy-orb-inline">
+            <span className="energy-current">{gameState.player.energy}</span>
+            <span className="energy-divider">/</span>
+            <span className="energy-max">{gameState.player.maxEnergy}</span>
+          </div>
+
           <div className="deck-pile-group">
             <div className="deck-pile draw-pile" title="드로우 더미">
               <div className="pile-stack">
@@ -127,6 +132,25 @@ function CombatScreen({
           >
             <span className="dm-icon">{deckManagementUsed ? '✓' : '⚙️'}</span>
           </button>
+        </div>
+
+        {/* 플레이어 체력바 */}
+        <div className={`player-health-inline ${playerHit ? 'hit' : ''}`}>
+          <div className="health-bar-inline">
+            <div
+              className={`health-fill-inline ${gameState.player.currentHp / gameState.player.maxHp <= 0.3 ? 'critical' : ''}`}
+              style={{ width: `${(gameState.player.currentHp / gameState.player.maxHp) * 100}%` }}
+            />
+            {playerHit && <div className="health-hit-flash" />}
+            <span className="health-text-inline">
+              {gameState.player.currentHp}/{gameState.player.maxHp}
+            </span>
+          </div>
+          {(gameState.player.statusEffects.find(e => e.type === 'block')?.amount || 0) > 0 && (
+            <div className="shield-inline">
+              🛡️ {gameState.player.statusEffects.find(e => e.type === 'block')?.amount || 0}
+            </div>
+          )}
         </div>
 
         <button
