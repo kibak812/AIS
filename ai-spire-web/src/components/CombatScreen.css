@@ -1,46 +1,310 @@
 .combat-screen {
   width: 100%;
   height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   position: relative;
+  overflow: hidden;
 }
 
+/* ===== 배경 레이어 ===== */
+.combat-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bg-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(102, 51, 153, 0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(139, 0, 0, 0.3) 0%, transparent 40%),
+    radial-gradient(ellipse at 20% 60%, rgba(0, 100, 150, 0.3) 0%, transparent 40%),
+    linear-gradient(180deg, #0d0d1a 0%, #1a1a2e 30%, #16213e 70%, #0f0f23 100%);
+}
+
+.bg-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  bottom: -20px;
+  width: 4px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  animation: float-up linear infinite;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+}
+
+@keyframes float-up {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) scale(0.5);
+    opacity: 0;
+  }
+}
+
+.bg-vignette {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.6) 100%);
+  pointer-events: none;
+}
+
+/* ===== 전투 이펙트 ===== */
+.combat-effects-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.combat-effect {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: effect-pop 0.8s ease-out forwards;
+}
+
+@keyframes effect-pop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  40% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -100%) scale(0.8);
+  }
+}
+
+.effect-icon {
+  font-size: 32px;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.effect-amount {
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+.effect-damage .effect-amount {
+  color: #ff4444;
+}
+
+.effect-block .effect-amount {
+  color: #4ecdc4;
+}
+
+.effect-heal .effect-amount {
+  color: #4ade80;
+}
+
+/* ===== 헤더 ===== */
 .combat-header {
+  position: relative;
+  z-index: 10;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 15px;
-  background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
+  padding: 12px 16px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 70%, transparent 100%);
 }
 
 .floor-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, rgba(139, 69, 19, 0.8) 0%, rgba(160, 82, 45, 0.8) 100%);
+  border-radius: 20px;
+  border: 2px solid rgba(255, 215, 0, 0.5);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.floor-icon {
+  font-size: 20px;
+}
+
+.floor-number {
   font-size: 18px;
   font-weight: bold;
   color: #ffd700;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
+/* ===== 하단 컨트롤 ===== */
 .combat-footer {
   position: absolute;
-  bottom: 140px;
-  right: 15px;
-  z-index: 10;
+  bottom: 180px;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.deck-info {
+  display: flex;
+  gap: 12px;
+}
+
+.deck-pile {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+}
+
+.pile-icon {
+  font-size: 18px;
+}
+
+.pile-count {
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.draw-pile {
+  border-color: rgba(100, 200, 255, 0.5);
+}
+
+.discard-pile {
+  border-color: rgba(255, 100, 100, 0.5);
 }
 
 .end-turn-button {
-  padding: 12px 30px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
   font-size: 18px;
   font-weight: bold;
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 50%, #d63031 100%);
   color: white;
-  border-radius: 25px;
-  box-shadow: 0 4px 15px rgba(238, 90, 111, 0.4);
+  border-radius: 30px;
+  box-shadow:
+    0 6px 20px rgba(238, 90, 111, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
-.end-turn-button:active {
+.end-turn-button:active:not(.disabled) {
   transform: scale(0.95);
-  box-shadow: 0 2px 10px rgba(238, 90, 111, 0.6);
+  box-shadow: 0 3px 10px rgba(238, 90, 111, 0.6);
+}
+
+.end-turn-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-text {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.btn-icon {
+  font-size: 16px;
+}
+
+/* ===== 타겟 선택 힌트 ===== */
+.target-hint {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 30;
+  padding: 12px 24px;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 25px;
+  border: 2px solid #ffd700;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffd700;
+  animation: pulse-hint 1.5s ease-in-out infinite;
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+}
+
+@keyframes pulse-hint {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.05);
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
+  }
+}
+
+/* ===== 반응형 ===== */
+@media (max-width: 400px) {
+  .combat-footer {
+    bottom: 160px;
+    padding: 0 10px;
+  }
+
+  .end-turn-button {
+    padding: 12px 20px;
+    font-size: 16px;
+  }
+
+  .deck-pile {
+    padding: 6px 10px;
+  }
+
+  .floor-info {
+    padding: 6px 12px;
+  }
+
+  .floor-number {
+    font-size: 16px;
+  }
 }

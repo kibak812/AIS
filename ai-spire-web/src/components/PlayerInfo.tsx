@@ -7,12 +7,13 @@ interface PlayerInfoProps {
 
 function PlayerInfo({ player }: PlayerInfoProps) {
   const hpPercentage = (player.currentHp / player.maxHp) * 100;
+  const block = player.statusEffects.find(e => e.type === 'block')?.amount || 0;
 
   const getStatusIcon = (type: string): string => {
     const icons: { [key: string]: string } = {
       strength: '💪',
       weak: '😰',
-      vulnerable: '🛡️',
+      vulnerable: '💔',
       block: '🛡️',
       burn: '🔥',
       poison: '☠️',
@@ -24,33 +25,34 @@ function PlayerInfo({ player }: PlayerInfoProps) {
 
   return (
     <div className="player-info">
+      {/* HP 바 */}
       <div className="health-bar-container">
+        <div className="health-icon">❤️</div>
         <div className="health-bar">
           <div
             className="health-fill"
             style={{ width: `${hpPercentage}%` }}
           />
-        </div>
-        <div className="health-text">
-          {player.currentHp} / {player.maxHp}
+          <div className="health-text">
+            {block > 0 && (
+              <span className="player-block">🛡️{block} </span>
+            )}
+            <span>{player.currentHp}/{player.maxHp}</span>
+          </div>
         </div>
       </div>
 
-      <div className="energy-display">
-        <span className="energy-icon">⚡</span>
-        <span className="energy-text">
-          {player.energy} / {player.maxEnergy}
-        </span>
-      </div>
-
-      {player.statusEffects.length > 0 && (
+      {/* 상태 효과 */}
+      {player.statusEffects.filter(e => e.type !== 'block').length > 0 && (
         <div className="status-effects">
-          {player.statusEffects.map((effect, index) => (
-            <div key={index} className="status-effect">
-              <span>{getStatusIcon(effect.type)}</span>
-              <span className="status-amount">{effect.amount}</span>
-            </div>
-          ))}
+          {player.statusEffects
+            .filter(e => e.type !== 'block')
+            .map((effect, index) => (
+              <div key={index} className="status-effect">
+                <span>{getStatusIcon(effect.type)}</span>
+                <span className="status-amount">{effect.amount}</span>
+              </div>
+            ))}
         </div>
       )}
     </div>

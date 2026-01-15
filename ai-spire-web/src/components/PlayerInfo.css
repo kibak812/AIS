@@ -1,27 +1,42 @@
 .player-info {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 12px;
 }
 
 .health-bar-container {
-  position: relative;
-  min-width: 150px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.health-icon {
+  font-size: 22px;
+  filter: drop-shadow(0 0 5px rgba(255, 0, 0, 0.5));
 }
 
 .health-bar {
-  width: 100%;
-  height: 25px;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 12px;
+  position: relative;
+  width: 140px;
+  height: 28px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 14px;
   overflow: hidden;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 100, 100, 0.4);
+  box-shadow:
+    inset 0 2px 5px rgba(0, 0, 0, 0.3),
+    0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .health-fill {
   height: 100%;
-  background: linear-gradient(90deg, #ff4757 0%, #ff6348 100%);
-  transition: width 0.3s ease;
+  background: linear-gradient(90deg,
+    #c0392b 0%,
+    #e74c3c 30%,
+    #ff6b6b 100%
+  );
+  transition: width 0.4s ease;
+  box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
 }
 
 .health-text {
@@ -32,33 +47,22 @@
   font-size: 14px;
   font-weight: bold;
   color: white;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
   pointer-events: none;
-}
-
-.energy-display {
+  white-space: nowrap;
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 8px 15px;
-  background: rgba(255, 215, 0, 0.2);
-  border-radius: 20px;
-  border: 2px solid rgba(255, 215, 0, 0.5);
+  gap: 4px;
 }
 
-.energy-icon {
-  font-size: 20px;
-}
-
-.energy-text {
-  font-size: 16px;
-  font-weight: bold;
-  color: #ffd700;
+.player-block {
+  color: #4ecdc4;
+  font-size: 12px;
 }
 
 .status-effects {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
 }
 
@@ -66,14 +70,35 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 10px;
-  background: rgba(0, 0, 0, 0.6);
+  padding: 5px 10px;
+  background: rgba(0, 0, 0, 0.7);
   border-radius: 15px;
-  font-size: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-size: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .status-amount {
   font-weight: bold;
   color: #ffd700;
+}
+
+@media (max-width: 400px) {
+  .health-bar {
+    width: 110px;
+    height: 24px;
+  }
+
+  .health-text {
+    font-size: 12px;
+  }
+
+  .health-icon {
+    font-size: 18px;
+  }
+
+  .status-effect {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
 }

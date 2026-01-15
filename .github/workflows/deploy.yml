@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - claude/ai-spire-web-game-4FRiJ
+      - main
   workflow_dispatch:
 
 permissions:

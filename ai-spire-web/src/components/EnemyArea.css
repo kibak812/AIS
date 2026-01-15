@@ -1,88 +1,168 @@
 .enemy-area {
   flex: 1;
+  position: relative;
+  z-index: 5;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 20px;
-  padding: 20px;
+  padding: 40px 20px 20px;
   flex-wrap: wrap;
 }
 
 .enemy-card {
   position: relative;
-  width: 140px;
-  padding: 15px;
-  background: linear-gradient(135deg, rgba(139, 0, 0, 0.8) 0%, rgba(178, 34, 34, 0.8) 100%);
-  border-radius: 15px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
+  width: 150px;
+  padding: 20px 15px 15px;
+  background: linear-gradient(145deg,
+    rgba(60, 20, 20, 0.9) 0%,
+    rgba(100, 30, 30, 0.9) 50%,
+    rgba(60, 20, 20, 0.9) 100%
+  );
+  border-radius: 20px;
+  border: 3px solid rgba(255, 100, 100, 0.4);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
   transition: all 0.3s ease;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .enemy-card:active {
-  transform: scale(0.95);
+  transform: scale(0.97);
 }
 
 .enemy-card.selected {
   border-color: #ffd700;
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+  box-shadow:
+    0 0 30px rgba(255, 215, 0, 0.5),
+    0 8px 30px rgba(0, 0, 0, 0.5);
 }
 
+.enemy-card.targetable {
+  border-color: rgba(255, 215, 0, 0.6);
+  animation: target-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes target-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 20px rgba(255, 215, 0, 0.3),
+      0 8px 30px rgba(0, 0, 0, 0.5);
+  }
+  50% {
+    box-shadow:
+      0 0 35px rgba(255, 215, 0, 0.5),
+      0 8px 30px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* ===== 적 의도 ===== */
 .enemy-intent {
   position: absolute;
-  top: -15px;
+  top: -18px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 5px 12px;
-  background: rgba(0, 0, 0, 0.8);
-  border-radius: 15px;
-  border: 2px solid rgba(255, 255, 255, 0.5);
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(0, 0, 0, 0.85);
+  border-radius: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
 .intent-icon {
-  font-size: 18px;
+  font-size: 20px;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
 }
 
 .intent-amount {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: bold;
-  color: #ff6b6b;
+  text-shadow: 0 0 10px currentColor;
+}
+
+/* ===== 적 스프라이트 ===== */
+.enemy-sprite-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .enemy-sprite {
-  font-size: 60px;
-  margin: 10px 0;
+  font-size: 70px;
+  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
+  transition: transform 0.3s ease;
 }
 
+.enemy-card:active .enemy-sprite {
+  transform: scale(0.95);
+}
+
+.enemy-card.targetable .enemy-sprite {
+  animation: enemy-bounce 2s ease-in-out infinite;
+}
+
+@keyframes enemy-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.target-indicator {
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  font-size: 24px;
+  animation: target-bounce 0.8s ease-in-out infinite;
+}
+
+@keyframes target-bounce {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-5px) scale(1.1);
+  }
+}
+
+/* ===== 적 이름 ===== */
 .enemy-name {
   font-size: 16px;
   font-weight: bold;
   color: white;
   text-align: center;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
+/* ===== 체력 바 ===== */
 .enemy-health-bar {
   position: relative;
   width: 100%;
-  height: 20px;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 10px;
+  height: 24px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 12px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .enemy-health-fill {
   height: 100%;
-  background: linear-gradient(90deg, #ff4757 0%, #ff6348 100%);
-  transition: width 0.3s ease;
+  background: linear-gradient(90deg,
+    #c0392b 0%,
+    #e74c3c 50%,
+    #ff6b6b 100%
+  );
+  transition: width 0.4s ease;
+  box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
 }
 
 .enemy-health-text {
@@ -90,27 +170,88 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: bold;
   color: white;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-  pointer-events: none;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
+.block-indicator {
+  color: #4ecdc4;
+  font-size: 12px;
+}
+
+/* ===== 상태 효과 ===== */
 .enemy-status-effects {
   display: flex;
-  gap: 5px;
+  gap: 6px;
   flex-wrap: wrap;
   justify-content: center;
+  margin-top: 5px;
 }
 
 .enemy-status-effect {
   display: flex;
   align-items: center;
   gap: 3px;
-  padding: 3px 8px;
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 10px;
-  font-size: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 12px;
+  font-size: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.status-amount {
+  font-weight: bold;
+  color: #fff;
+}
+
+/* ===== 타겟 글로우 ===== */
+.targetable-glow {
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border-radius: 25px;
+  background: transparent;
+  pointer-events: none;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+}
+
+/* ===== 반응형 ===== */
+@media (max-width: 400px) {
+  .enemy-card {
+    width: 130px;
+    padding: 18px 12px 12px;
+  }
+
+  .enemy-sprite {
+    font-size: 55px;
+  }
+
+  .enemy-name {
+    font-size: 14px;
+  }
+
+  .enemy-health-bar {
+    height: 20px;
+  }
+
+  .enemy-health-text {
+    font-size: 11px;
+  }
+
+  .intent-icon {
+    font-size: 18px;
+  }
+
+  .intent-amount {
+    font-size: 14px;
+  }
 }
