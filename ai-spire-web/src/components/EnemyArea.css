@@ -1,3 +1,4 @@
+/* ===== 적 영역 ===== */
 .enemy-area {
   flex: 1;
   position: relative;
@@ -5,253 +6,468 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 20px;
-  padding: 40px 20px 20px;
-  flex-wrap: wrap;
+  padding: 30px 16px 20px;
 }
 
-.enemy-card {
-  position: relative;
-  width: 150px;
-  padding: 20px 15px 15px;
-  background: linear-gradient(145deg,
-    rgba(60, 20, 20, 0.9) 0%,
-    rgba(100, 30, 30, 0.9) 50%,
-    rgba(60, 20, 20, 0.9) 100%
-  );
-  border-radius: 20px;
-  border: 3px solid rgba(255, 100, 100, 0.4);
+.enemy-battlefield {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  box-shadow:
-    0 8px 30px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  justify-content: center;
+  align-items: flex-end;
+  gap: 24px;
+  flex-wrap: wrap;
+  perspective: 1000px;
 }
 
-.enemy-card:active {
+/* ===== 적 컨테이너 ===== */
+.enemy-container {
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.enemy-container:active {
   transform: scale(0.97);
 }
 
-.enemy-card.selected {
-  border-color: #ffd700;
-  box-shadow:
-    0 0 30px rgba(255, 215, 0, 0.5),
-    0 8px 30px rgba(0, 0, 0, 0.5);
+.enemy-container.targetable {
+  animation: floatHover 2s ease-in-out infinite;
 }
 
-.enemy-card.targetable {
-  border-color: rgba(255, 215, 0, 0.6);
-  animation: target-pulse 1.5s ease-in-out infinite;
-}
-
-@keyframes target-pulse {
-  0%, 100% {
-    box-shadow:
-      0 0 20px rgba(255, 215, 0, 0.3),
-      0 8px 30px rgba(0, 0, 0, 0.5);
-  }
-  50% {
-    box-shadow:
-      0 0 35px rgba(255, 215, 0, 0.5),
-      0 8px 30px rgba(0, 0, 0, 0.5);
-  }
-}
-
-/* ===== 적 의도 ===== */
-.enemy-intent {
-  position: absolute;
-  top: -18px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  background: rgba(0, 0, 0, 0.85);
-  border-radius: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-}
-
-.intent-icon {
-  font-size: 20px;
-  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
-}
-
-.intent-amount {
-  font-size: 16px;
-  font-weight: bold;
-  text-shadow: 0 0 10px currentColor;
-}
-
-/* ===== 적 스프라이트 ===== */
-.enemy-sprite-container {
-  position: relative;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.enemy-sprite {
-  font-size: 70px;
-  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
-  transition: transform 0.3s ease;
-}
-
-.enemy-card:active .enemy-sprite {
-  transform: scale(0.95);
-}
-
-.enemy-card.targetable .enemy-sprite {
-  animation: enemy-bounce 2s ease-in-out infinite;
-}
-
-@keyframes enemy-bounce {
+@keyframes floatHover {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-5px); }
 }
 
-.target-indicator {
+/* ===== 적 의도 배지 ===== */
+.enemy-intent-badge {
   position: absolute;
-  top: -10px;
-  right: 10px;
-  font-size: 24px;
-  animation: target-bounce 0.8s ease-in-out infinite;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: linear-gradient(145deg, rgba(20, 20, 30, 0.95) 0%, rgba(10, 10, 20, 0.98) 100%);
+  border-radius: 20px;
+  border: 2px solid var(--intent-color);
+  box-shadow:
+    0 0 20px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-@keyframes target-bounce {
-  0%, 100% {
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    transform: translateY(-5px) scale(1.1);
-  }
+.intent-glow {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 22px;
+  background: transparent;
+  box-shadow: 0 0 15px var(--intent-color);
+  opacity: 0.6;
+  animation: intentPulse 2s ease-in-out infinite;
 }
 
-/* ===== 적 이름 ===== */
-.enemy-name {
-  font-size: 16px;
-  font-weight: bold;
-  color: white;
-  text-align: center;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+@keyframes intentPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
 }
 
-/* ===== 체력 바 ===== */
-.enemy-health-bar {
+.intent-icon {
+  font-size: 20px;
+  filter: drop-shadow(0 0 5px var(--intent-color));
+}
+
+.intent-value {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--intent-color);
+  text-shadow: 0 0 10px var(--intent-color);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+/* ===== 프리미엄 적 카드 ===== */
+.enemy-card-premium {
+  position: relative;
+  width: 160px;
+  padding: 16px 12px 12px;
+  background: linear-gradient(160deg,
+    rgba(30, 20, 35, 0.95) 0%,
+    rgba(50, 30, 40, 0.95) 30%,
+    rgba(40, 25, 35, 0.95) 70%,
+    rgba(25, 15, 25, 0.95) 100%
+  );
+  border-radius: 20px;
+  border: 3px solid rgba(180, 100, 120, 0.4);
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.6),
+    0 5px 20px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+.enemy-container.selected .enemy-card-premium {
+  border-color: #ffd700;
+  box-shadow:
+    0 0 40px rgba(255, 215, 0, 0.4),
+    0 15px 40px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.enemy-container.targetable .enemy-card-premium {
+  border-color: rgba(255, 215, 0, 0.6);
+}
+
+/* ===== 카드 장식 ===== */
+.card-decoration {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 200, 150, 0.3) 20%,
+    rgba(255, 200, 150, 0.5) 50%,
+    rgba(255, 200, 150, 0.3) 80%,
+    transparent 100%
+  );
+}
+
+.card-decoration.top {
+  top: 8px;
+}
+
+.card-decoration.bottom {
+  bottom: 8px;
+}
+
+/* ===== 몬스터 스테이지 ===== */
+.monster-stage {
   position: relative;
   width: 100%;
-  height: 24px;
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 12px;
-  overflow: hidden;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+  height: 95px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 8px;
 }
 
-.enemy-health-fill {
-  height: 100%;
-  background: linear-gradient(90deg,
-    #c0392b 0%,
-    #e74c3c 50%,
-    #ff6b6b 100%
-  );
-  transition: width 0.4s ease;
-  box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+.stage-glow {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 20px;
+  background: radial-gradient(ellipse, rgba(255, 100, 100, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
 }
 
-.enemy-health-text {
+/* ===== 타겟 조준선 ===== */
+.target-reticle {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 13px;
-  font-weight: bold;
-  color: white;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
-  white-space: nowrap;
+  width: 80px;
+  height: 80px;
+  pointer-events: none;
+}
+
+.reticle-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 3px solid rgba(255, 215, 0, 0.6);
+  border-radius: 50%;
+  animation: reticleRotate 3s linear infinite, reticlePulse 1.5s ease-in-out infinite;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+.reticle-cross {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+}
+
+.reticle-cross::before,
+.reticle-cross::after {
+  content: '';
+  position: absolute;
+  background: rgba(255, 215, 0, 0.5);
+}
+
+.reticle-cross::before {
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  transform: translateY(-50%);
+}
+
+.reticle-cross::after {
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  transform: translateX(-50%);
+}
+
+@keyframes reticleRotate {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes reticlePulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* ===== 이름 플레이트 ===== */
+.enemy-name-plate {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.name-text {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.8),
+    0 0 20px rgba(255, 100, 100, 0.3);
+  letter-spacing: 1px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+/* ===== 체력 바 ===== */
+.health-bar-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 6px;
+}
+
+.health-bar-bg {
+  position: relative;
+  width: 100%;
+  height: 22px;
+  background: linear-gradient(180deg,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(20, 10, 15, 0.9) 100%
+  );
+  border-radius: 11px;
+  border: 2px solid rgba(80, 40, 50, 0.8);
+  overflow: hidden;
+  box-shadow:
+    inset 0 3px 8px rgba(0, 0, 0, 0.6),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.health-bar-fill {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  bottom: 2px;
+  border-radius: 8px;
+  background: linear-gradient(180deg,
+    #ff6b6b 0%,
+    #ee5a5a 30%,
+    #dc4444 70%,
+    #c43535 100%
+  );
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:
+    0 0 15px rgba(220, 80, 80, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+}
+
+.health-bar-fill.critical {
+  background: linear-gradient(180deg,
+    #ff4444 0%,
+    #cc2222 50%,
+    #aa1111 100%
+  );
+  animation: criticalPulse 0.8s ease-in-out infinite;
+}
+
+@keyframes criticalPulse {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.3); }
+}
+
+.health-bar-shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  border-radius: 6px 6px 0 0;
+}
+
+.health-flash {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  animation: healthFlashAnim 0.2s ease-out forwards;
+}
+
+@keyframes healthFlashAnim {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.health-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   gap: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  white-space: nowrap;
 }
 
-.block-indicator {
-  color: #4ecdc4;
-  font-size: 12px;
-}
-
-/* ===== 상태 효과 ===== */
-.enemy-status-effects {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 5px;
-}
-
-.enemy-status-effect {
+.shield-value {
   display: flex;
   align-items: center;
-  gap: 3px;
-  padding: 4px 10px;
-  background: rgba(0, 0, 0, 0.7);
-  border-radius: 12px;
-  font-size: 13px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  gap: 2px;
+  color: #5dade2;
+  margin-right: 4px;
 }
 
-.status-amount {
-  font-weight: bold;
+.shield-icon {
+  font-size: 11px;
+}
+
+.hp-value {
   color: #fff;
 }
 
-/* ===== 타겟 글로우 ===== */
-.targetable-glow {
+.hp-separator {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.hp-max {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ===== 상태 효과 ===== */
+.status-effects-row {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.status-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: linear-gradient(145deg,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(20, 20, 30, 0.8) 100%
+  );
+  border-radius: 12px;
+  border: 1px solid var(--status-color);
+  box-shadow:
+    0 0 8px color-mix(in srgb, var(--status-color) 30%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.status-icon {
+  font-size: 13px;
+}
+
+.status-value {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--status-color);
+  text-shadow: 0 0 5px var(--status-color);
+}
+
+/* ===== 타겟 가능 오라 ===== */
+.targetable-aura {
   position: absolute;
-  top: -5px;
-  left: -5px;
-  right: -5px;
-  bottom: -5px;
-  border-radius: 25px;
-  background: transparent;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  border-radius: 30px;
   pointer-events: none;
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+  background: transparent;
+  box-shadow:
+    0 0 30px rgba(255, 215, 0, 0.3),
+    0 0 60px rgba(255, 215, 0, 0.15);
+  animation: auraPulse 2s ease-in-out infinite;
+}
+
+@keyframes auraPulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
 }
 
 /* ===== 반응형 ===== */
 @media (max-width: 400px) {
-  .enemy-card {
-    width: 130px;
-    padding: 18px 12px 12px;
+  .enemy-battlefield {
+    gap: 16px;
   }
 
-  .enemy-sprite {
-    font-size: 55px;
+  .enemy-card-premium {
+    width: 140px;
+    padding: 14px 10px 10px;
   }
 
-  .enemy-name {
+  .monster-stage {
+    height: 80px;
+  }
+
+  .name-text {
     font-size: 14px;
   }
 
-  .enemy-health-bar {
+  .health-bar-bg {
     height: 20px;
   }
 
-  .enemy-health-text {
-    font-size: 11px;
+  .health-text {
+    font-size: 12px;
   }
 
   .intent-icon {
     font-size: 18px;
   }
 
-  .intent-amount {
-    font-size: 14px;
+  .intent-value {
+    font-size: 16px;
   }
 }

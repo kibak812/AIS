@@ -1,0 +1,595 @@
+/* ===== 덱 정비 화면 ===== */
+.deck-management-screen {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ===== 배경 ===== */
+.dm-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+}
+
+.dm-bg-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(75, 0, 130, 0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(0, 100, 100, 0.3) 0%, transparent 50%),
+    linear-gradient(180deg, #0a0a15 0%, #151528 50%, #0d0d1a 100%);
+}
+
+.dm-bg-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+/* ===== 헤더 ===== */
+.dm-header {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 30px 20px 20px;
+}
+
+.dm-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #fff;
+  text-shadow:
+    0 0 30px rgba(138, 43, 226, 0.5),
+    0 4px 8px rgba(0, 0, 0, 0.5);
+  margin: 0 0 8px 0;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.dm-subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* ===== 탭 네비게이션 ===== */
+.dm-tabs {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 0 20px 20px;
+}
+
+.dm-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dm-tab:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.dm-tab.active {
+  color: #fff;
+  background: linear-gradient(145deg, rgba(138, 43, 226, 0.4), rgba(75, 0, 130, 0.4));
+  border-color: rgba(138, 43, 226, 0.6);
+  box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+}
+
+.tab-icon {
+  font-size: 18px;
+}
+
+/* ===== 컨텐츠 영역 ===== */
+.dm-content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  padding: 0 16px 100px;
+  overflow-y: auto;
+}
+
+/* ===== 덱 뷰 ===== */
+.dm-deck-view {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dm-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ===== 덱 카드 ===== */
+.dm-card {
+  position: relative;
+  height: 180px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+}
+
+.dm-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.dm-card.selected {
+  border-color: #ff4757;
+  box-shadow:
+    0 0 30px rgba(255, 71, 87, 0.4),
+    0 15px 40px rgba(0, 0, 0, 0.5);
+  transform: scale(1.02);
+}
+
+.dm-card-cost {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(145deg, #f39c12, #b9770e);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 3px 10px rgba(243, 156, 18, 0.4);
+}
+
+.dm-card-rarity {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dm-card-rarity.uncommon {
+  background: linear-gradient(145deg, #5dade2, #2980b9);
+  color: #fff;
+}
+
+.dm-card-rarity.rare {
+  background: linear-gradient(145deg, #ffd700, #f39c12);
+  color: #fff;
+}
+
+.dm-card-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding-left: 20px;
+}
+
+.dm-card-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dm-card-desc {
+  flex: 1;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  line-height: 1.4;
+  padding: 8px 4px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.dm-card-footer {
+  text-align: center;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dm-card-type {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ===== 액션 패널 ===== */
+.dm-action-panel {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 24px;
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 20px;
+  border: 2px solid rgba(255, 71, 87, 0.5);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.dm-remove-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(145deg, #ff4757, #c0392b);
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+}
+
+.dm-remove-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(255, 71, 87, 0.5);
+}
+
+.dm-warning {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+/* ===== AI 뷰 ===== */
+.dm-ai-view {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.dm-ai-input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dm-ai-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.dm-ai-input-wrapper {
+  position: relative;
+}
+
+.dm-ai-input {
+  width: 100%;
+  padding: 16px 20px;
+  font-size: 15px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.dm-ai-input:focus {
+  border-color: rgba(138, 43, 226, 0.6);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 20px rgba(138, 43, 226, 0.2);
+}
+
+.dm-ai-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.dm-generate-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 32px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(145deg, #8e44ad, #5b2c6f);
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow:
+    0 6px 25px rgba(142, 68, 173, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.dm-generate-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 35px rgba(142, 68, 173, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.dm-generate-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.dm-generate-btn.generating {
+  background: linear-gradient(145deg, #6c3483, #4a235a);
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== 생성된 카드 섹션 ===== */
+.dm-generated-card-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.dm-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  text-align: center;
+}
+
+.dm-generated-card-wrapper {
+  animation: cardReveal 0.5s ease-out;
+}
+
+@keyframes cardReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) rotateY(-20deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotateY(0);
+  }
+}
+
+.dm-generated-card {
+  position: relative;
+  width: 160px;
+  height: 220px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+    0 15px 50px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(138, 43, 226, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.dm-card-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.dm-accept-btn,
+.dm-reject-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dm-accept-btn {
+  color: #fff;
+  background: linear-gradient(145deg, #27ae60, #1e8449);
+  box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+}
+
+.dm-accept-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(39, 174, 96, 0.5);
+}
+
+.dm-reject-btn {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dm-reject-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+/* ===== AI 정보 ===== */
+.dm-ai-info {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dm-info-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.dm-info-text {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+}
+
+.dm-info-text p {
+  margin: 0 0 4px 0;
+}
+
+.dm-info-text p:last-child {
+  margin-bottom: 0;
+}
+
+/* ===== 푸터 ===== */
+.dm-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding: 20px;
+  background: linear-gradient(to top,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.8) 70%,
+    transparent 100%
+  );
+  display: flex;
+  justify-content: center;
+}
+
+.dm-complete-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 40px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(145deg, #3498db, #2574a9);
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow:
+    0 6px 25px rgba(52, 152, 219, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.dm-complete-btn:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 35px rgba(52, 152, 219, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-arrow {
+  font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+.dm-complete-btn:hover .btn-arrow {
+  transform: translateX(5px);
+}
+
+/* ===== 반응형 ===== */
+@media (max-width: 400px) {
+  .dm-title {
+    font-size: 26px;
+  }
+
+  .dm-tabs {
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 16px 16px;
+  }
+
+  .dm-tab {
+    justify-content: center;
+  }
+
+  .dm-card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+  }
+
+  .dm-card {
+    height: 160px;
+    padding: 10px;
+  }
+
+  .dm-card-name {
+    font-size: 12px;
+  }
+
+  .dm-card-desc {
+    font-size: 10px;
+  }
+
+  .dm-generated-card {
+    width: 140px;
+    height: 190px;
+  }
+}

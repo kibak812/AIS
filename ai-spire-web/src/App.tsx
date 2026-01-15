@@ -1,10 +1,11 @@
 import { useState, useCallback } from 'react';
 import './App.css';
-import type { GameState } from './types';
-import { createInitialGameState, playCard, endTurn, startNextFloor } from './gameEngine';
-import { getRandomCards } from './cards';
+import type { GameState, Card } from './types';
+import { createInitialGameState, playCard, endTurn, startNextFloor, addCardToDeck } from './gameEngine';
+import { getRandomCards, generateCardId } from './cards';
 import CombatScreen from './components/CombatScreen';
 import RewardScreen from './components/RewardScreen';
+import DeckManagementScreen from './components/DeckManagementScreen';
 
 interface CombatEffect {
   id: string;
@@ -27,15 +28,18 @@ function App() {
   const [selectedEnemyId, setSelectedEnemyId] = useState<string | null>(null);
   const [combatEffects, setCombatEffects] = useState<CombatEffect[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [hitEnemyId, setHitEnemyId] = useState<string | null>(null);
+  const [attackingEnemyId, setAttackingEnemyId] = useState<string | null>(null);
+  const [playerHit, setPlayerHit] = useState(false);
 
-  const showCombatEffect = useCallback((type: CombatEffect['type'], amount: number, targetId: string) => {
+  const showCombatEffect = useCallback((type: CombatEffect['type'], amount: number, targetId: string, x?: number, y?: number) => {
     const effect: CombatEffect = {
       id: `${Date.now()}-${Math.random()}`,
       type,
       amount,
       targetId,
-      x: 50 + Math.random() * 20 - 10,
-      y: 30 + Math.random() * 10,
+      x: x ?? (50 + Math.random() * 20 - 10),
+      y: y ?? (30 + Math.random() * 10),
     };
     setCombatEffects(prev => [...prev, effect]);
     setTimeout(() => {
@@ -51,12 +55,24 @@ function App() {
 
     setIsAnimating(true);
 
+    // 타격 이펙트 표시
+    if (targetEnemyId) {
+      setHitEnemyId(targetEnemyId);
+      setTimeout(() => setHitEnemyId(null), 200);
+    }
+
     // 이펙트 표시
     card.effects.forEach(effect => {
       if (effect.type === 'damage' && targetEnemyId) {
-        showCombatEffect('damage', effect.amount, targetEnemyId);
+        showCombatEffect('damage', effect.amount, targetEnemyId, 50 + Math.random() * 10 - 5, 35);
+      } else if (effect.type === 'damage' && effect.target === 'all_enemies') {
+        gameState.enemies.forEach((enemy, i) => {
+          setTimeout(() => {
+            showCombatEffect('damage', effect.amount, enemy.id, 30 + i * 25, 35);
+          }, i * 100);
+        });
       } else if (effect.type === 'block') {
-        showCombatEffect('block', effect.amount, 'player');
+        showCombatEffect('block', effect.amount, 'player', 85, 15);
       }
     });
 
@@ -67,13 +83,30 @@ function App() {
       setSelectedCardId(null);
       setSelectedEnemyId(null);
       setIsAnimating(false);
-    }, 150);
+    }, 250);
   }, [gameState, isAnimating, showCombatEffect]);
 
   const handleEndTurn = useCallback(() => {
     if (isAnimating) return;
 
     setIsAnimating(true);
+
+    // 적 공격 애니메이션
+    const attackingEnemies = gameState.enemies.filter(e => e.intent.type === 'attack');
+    attackingEnemies.forEach((enemy, i) => {
+      setTimeout(() => {
+        setAttackingEnemyId(enemy.id);
+        setTimeout(() => {
+          setAttackingEnemyId(null);
+          setPlayerHit(true);
+          showCombatEffect('damage', enemy.intent.amount, 'player', 85, 15);
+          setTimeout(() => setPlayerHit(false), 200);
+        }, 200);
+      }, i * 400);
+    });
+
+    const totalDelay = Math.max(300, attackingEnemies.length * 400 + 200);
+
     setTimeout(() => {
       const newState = endTurn(gameState);
       if (newState.phase === 'reward') {
@@ -83,8 +116,8 @@ function App() {
         setGameState(newState);
       }
       setIsAnimating(false);
-    }, 200);
-  }, [gameState, isAnimating]);
+    }, totalDelay);
+  }, [gameState, isAnimating, showCombatEffect]);
 
   const handleSelectCard = useCallback((cardId: string) => {
     if (isAnimating) return;
@@ -97,19 +130,15 @@ function App() {
     const card = gameState.player.hand.find((c) => c.id === cardId);
     if (!card || gameState.player.energy < card.cost) return;
 
-    // 타겟이 필요한 카드인지 확인
     const needsTarget = card.effects.some(
       (effect) => effect.target === 'enemy'
     );
 
     if (needsTarget && gameState.enemies.length > 1) {
-      // 적이 여러 마리면 선택 대기
       setSelectedCardId(cardId);
     } else if (needsTarget && gameState.enemies.length === 1) {
-      // 적이 한 마리면 즉시 사용
       handlePlayCard(cardId, gameState.enemies[0].id);
     } else {
-      // 자신 대상 또는 전체 대상 카드는 즉시 사용
       handlePlayCard(cardId, gameState.enemies[0]?.id);
     }
   }, [gameState, selectedCardId, isAnimating, handlePlayCard]);
@@ -144,19 +173,59 @@ function App() {
     setGameState(newState);
   };
 
+  const handleOpenDeckManagement = () => {
+    setGameState(prev => ({ ...prev, phase: 'deckManagement' }));
+  };
+
+  const handleRemoveCard = (cardId: string) => {
+    setGameState(prev => ({
+      ...prev,
+      player: {
+        ...prev.player,
+        deck: prev.player.deck.filter(c => c.id !== cardId),
+        drawPile: prev.player.drawPile.filter(c => c.id !== cardId),
+        discardPile: prev.player.discardPile.filter(c => c.id !== cardId),
+      }
+    }));
+  };
+
+  const handleAddAICard = (card: Card) => {
+    const newCard = { ...card, id: generateCardId() };
+    setGameState(prev => addCardToDeck(prev, newCard));
+  };
+
+  const handleCompleteDeckManagement = () => {
+    setGameState(prev => ({ ...prev, phase: 'combat' }));
+  };
+
   if (gameState.player.currentHp <= 0) {
     return (
-      <div className="game-over">
-        <h1>게임 오버</h1>
-        <p>{gameState.floor}층까지 도달했습니다</p>
-        <button
-          onClick={() => {
-            const newState = createInitialGameState();
-            setGameState({ ...newState, rewardCards: [] });
-          }}
-        >
-          다시 시작
-        </button>
+      <div className="game-over-screen">
+        <div className="game-over-bg" />
+        <div className="game-over-content">
+          <div className="skull-icon">💀</div>
+          <h1 className="game-over-title">패배</h1>
+          <div className="game-over-stats">
+            <div className="stat-item">
+              <span className="stat-label">도달 층수</span>
+              <span className="stat-value">{gameState.floor}</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-label">덱 크기</span>
+              <span className="stat-value">{gameState.player.deck.length}</span>
+            </div>
+          </div>
+          <button
+            className="restart-button"
+            onClick={() => {
+              const newState = createInitialGameState();
+              setGameState({ ...newState, rewardCards: [] });
+            }}
+          >
+            <span>다시 도전하기</span>
+            <span className="restart-icon">⚔️</span>
+          </button>
+        </div>
       </div>
     );
   }
@@ -170,15 +239,26 @@ function App() {
           selectedEnemyId={selectedEnemyId}
           combatEffects={combatEffects}
           isAnimating={isAnimating}
+          hitEnemyId={hitEnemyId}
+          attackingEnemyId={attackingEnemyId}
+          playerHit={playerHit}
           onSelectCard={handleSelectCard}
           onSelectEnemy={handleSelectEnemy}
           onEndTurn={handleEndTurn}
+          onOpenDeckManagement={handleOpenDeckManagement}
         />
       ) : gameState.phase === 'reward' ? (
         <RewardScreen
           cards={gameState.rewardCards || []}
           onSelectCard={handleRewardSelect}
           onSkip={handleSkipReward}
+        />
+      ) : gameState.phase === 'deckManagement' ? (
+        <DeckManagementScreen
+          deck={gameState.player.deck}
+          onRemoveCard={handleRemoveCard}
+          onAddAICard={handleAddAICard}
+          onComplete={handleCompleteDeckManagement}
         />
       ) : null}
     </div>

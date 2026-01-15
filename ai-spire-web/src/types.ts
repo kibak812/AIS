@@ -69,7 +69,7 @@ export interface Relic {
   description: string;
 }
 
-export type GamePhase = 'combat' | 'reward' | 'event' | 'rest' | 'shop';
+export type GamePhase = 'combat' | 'reward' | 'event' | 'rest' | 'shop' | 'deckManagement';
 
 export interface GameState {
   player: Player;
@@ -78,4 +78,17 @@ export interface GameState {
   floor: number;
   turnCount: number;
   rewardCards?: Card[];
+  aiGeneratedCard?: Card;
+}
+
+// AI 카드 생성 관련 타입
+export interface AICardGenerationRequest {
+  prompt: string;
+  preferredType?: CardType;
+  preferredRarity?: CardRarity;
+}
+
+export interface AICardGenerationResult {
+  card: Card;
+  description: string;
 }

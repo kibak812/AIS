@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import type { Card } from '../types';
 import './HandArea.css';
 
@@ -13,104 +13,195 @@ interface HandAreaProps {
 
 function HandArea({ hand, energy, maxEnergy, selectedCardId, onSelectCard, disabled }: HandAreaProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
 
-  // 카드가 변경되면 스크롤 위치 리셋
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollLeft = 0;
     }
   }, [hand.length]);
 
-  const getCardColor = (type: string): string => {
-    const colors: { [key: string]: string } = {
-      attack: 'linear-gradient(145deg, #ff6b6b 0%, #c0392b 100%)',
-      skill: 'linear-gradient(145deg, #4ecdc4 0%, #16a085 100%)',
-      power: 'linear-gradient(145deg, #a55eea 0%, #6c3483 100%)',
+  const getCardGradient = (type: string, rarity: string): string => {
+    const baseGradients: { [key: string]: string } = {
+      attack: `linear-gradient(160deg,
+        #ff6b6b 0%,
+        #ee5a5a 20%,
+        #dc4444 50%,
+        #c43535 80%,
+        #a02020 100%)`,
+      skill: `linear-gradient(160deg,
+        #5dade2 0%,
+        #48c9b0 20%,
+        #1abc9c 50%,
+        #16a085 80%,
+        #0e6655 100%)`,
+      power: `linear-gradient(160deg,
+        #bb8fce 0%,
+        #a569bd 20%,
+        #9b59b6 50%,
+        #7d3c98 80%,
+        #5b2c6f 100%)`,
     };
-    return colors[type] || colors.attack;
+
+    if (rarity === 'rare') {
+      return `linear-gradient(160deg,
+        #ffd700 0%,
+        #ffb347 20%,
+        #ff8c00 50%,
+        #e65c00 80%,
+        #cc4400 100%)`;
+    }
+
+    return baseGradients[type] || baseGradients.attack;
   };
 
-  const getTypeIcon = (type: string): string => {
+  const getCardIcon = (type: string): string => {
     const icons: { [key: string]: string } = {
       attack: '⚔️',
       skill: '✨',
-      power: '💫',
+      power: '🔮',
     };
     return icons[type] || '❓';
   };
 
-  const getTypeText = (type: string): string => {
-    const typeText: { [key: string]: string } = {
+  const getTypeLabel = (type: string): string => {
+    const labels: { [key: string]: string } = {
       attack: '공격',
-      skill: '스킬',
+      skill: '기술',
       power: '파워',
     };
-    return typeText[type] || type;
+    return labels[type] || type;
+  };
+
+  const getRarityBorder = (rarity: string): string => {
+    const borders: { [key: string]: string } = {
+      common: 'rgba(255, 255, 255, 0.3)',
+      uncommon: 'rgba(100, 200, 255, 0.6)',
+      rare: 'rgba(255, 215, 0, 0.8)',
+    };
+    return borders[rarity] || borders.common;
   };
 
   return (
-    <div className="hand-area">
-      {/* 에너지 표시 */}
-      <div className="energy-display">
-        <div className="energy-orb">
-          <span className="energy-icon">⚡</span>
-          <span className="energy-value">{energy}</span>
-          <span className="energy-max">/{maxEnergy}</span>
+    <div className="hand-area-premium">
+      {/* 에너지 오브 */}
+      <div className="energy-orb-container">
+        <div className="energy-orb-premium">
+          <div className="orb-outer-ring" />
+          <div className="orb-inner">
+            <div className="orb-glow" />
+            <div className="orb-content">
+              <span className="energy-current">{energy}</span>
+              <span className="energy-divider">/</span>
+              <span className="energy-max">{maxEnergy}</span>
+            </div>
+            <div className="orb-particles">
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="orb-particle" style={{
+                  '--angle': `${i * 45}deg`,
+                  '--delay': `${i * 0.2}s`,
+                } as React.CSSProperties} />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
       {/* 카드 컨테이너 */}
-      <div className="hand-container" ref={containerRef}>
-        <div className="hand-scroll">
+      <div className="hand-container-premium" ref={containerRef}>
+        <div className="hand-scroll-premium">
           {hand.map((card, index) => {
             const isSelected = card.id === selectedCardId;
+            const isHovered = card.id === hoveredCardId;
             const canAfford = energy >= card.cost;
             const isDisabled = disabled || !canAfford;
 
             return (
               <div
                 key={card.id}
-                className={`card ${isSelected ? 'selected' : ''} ${!canAfford ? 'unaffordable' : ''} ${disabled ? 'disabled' : ''}`}
+                className={`
+                  card-premium
+                  ${isSelected ? 'selected' : ''}
+                  ${isHovered ? 'hovered' : ''}
+                  ${!canAfford ? 'unaffordable' : ''}
+                  ${disabled ? 'disabled' : ''}
+                  rarity-${card.rarity}
+                `}
                 style={{
-                  background: getCardColor(card.type),
-                  animationDelay: `${index * 0.05}s`,
-                }}
+                  '--card-bg': getCardGradient(card.type, card.rarity),
+                  '--card-border': getRarityBorder(card.rarity),
+                  '--card-index': index,
+                } as React.CSSProperties}
                 onClick={() => !isDisabled && onSelectCard(card.id)}
+                onMouseEnter={() => setHoveredCardId(card.id)}
+                onMouseLeave={() => setHoveredCardId(null)}
+                onTouchStart={() => setHoveredCardId(card.id)}
+                onTouchEnd={() => setHoveredCardId(null)}
               >
-                {/* 카드 코스트 */}
-                <div className={`card-cost ${!canAfford ? 'insufficient' : ''}`}>
-                  <span>{card.cost}</span>
+                {/* 카드 광택 효과 */}
+                <div className="card-shine" />
+
+                {/* 코스트 보석 */}
+                <div className={`cost-gem ${!canAfford ? 'depleted' : ''}`}>
+                  <div className="gem-glow" />
+                  <span className="gem-value">{card.cost}</span>
                 </div>
 
-                {/* 카드 테두리 장식 */}
-                <div className="card-border-glow" />
+                {/* 희귀도 장식 */}
+                {card.rarity !== 'common' && (
+                  <div className={`rarity-badge ${card.rarity}`}>
+                    {card.rarity === 'rare' ? '★' : '◆'}
+                  </div>
+                )}
 
-                {/* 카드 내용 */}
-                <div className="card-content">
-                  <div className="card-header">
-                    <span className="card-type-icon">{getTypeIcon(card.type)}</span>
-                    <span className="card-name">{card.name}</span>
+                {/* 카드 프레임 */}
+                <div className="card-frame">
+                  {/* 상단 장식 */}
+                  <div className="frame-ornament top" />
+
+                  {/* 카드 헤더 */}
+                  <div className="card-header-premium">
+                    <span className="card-icon">{getCardIcon(card.type)}</span>
+                    <span className="card-title">{card.name}</span>
                   </div>
 
-                  <div className="card-description">{card.description}</div>
-
-                  <div className="card-footer">
-                    <span className="card-type">{getTypeText(card.type)}</span>
+                  {/* 카드 아트 영역 */}
+                  <div className="card-art-area">
+                    <div className="art-pattern" />
                   </div>
+
+                  {/* 설명 영역 */}
+                  <div className="card-description-premium">
+                    {card.description}
+                  </div>
+
+                  {/* 타입 태그 */}
+                  <div className="card-type-tag">
+                    <span>{getTypeLabel(card.type)}</span>
+                  </div>
+
+                  {/* 하단 장식 */}
+                  <div className="frame-ornament bottom" />
                 </div>
 
                 {/* 선택 효과 */}
-                {isSelected && <div className="card-selected-glow" />}
+                {isSelected && (
+                  <div className="selection-aura">
+                    <div className="aura-ring" />
+                  </div>
+                )}
               </div>
             );
           })}
         </div>
       </div>
 
-      {/* 스크롤 힌트 */}
-      {hand.length > 3 && (
-        <div className="scroll-hint">
-          <span>← 스와이프 →</span>
+      {/* 스크롤 인디케이터 */}
+      {hand.length > 4 && (
+        <div className="scroll-indicator">
+          <div className="scroll-arrow left">‹</div>
+          <span>스와이프</span>
+          <div className="scroll-arrow right">›</div>
         </div>
       )}
     </div>
