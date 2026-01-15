@@ -5,7 +5,7 @@ import HandArea from './HandArea';
 
 interface CombatEffect {
   id: string;
-  type: 'damage' | 'block' | 'heal';
+  type: 'damage' | 'block' | 'heal' | 'blocked' | 'actual_damage';
   amount: number;
   targetId: string;
   x: number;
@@ -64,19 +64,43 @@ function CombatScreen({
 
       {/* 전투 이펙트 */}
       <div className="combat-effects-layer">
-        {combatEffects.map(effect => (
-          <div
-            key={effect.id}
-            className={`combat-effect effect-${effect.type}`}
-            style={{ left: `${effect.x}%`, top: `${effect.y}%` }}
-          >
-            <div className="effect-burst" />
-            <span className="effect-amount">
-              {effect.type === 'damage' ? '-' : '+'}
-              {effect.amount}
-            </span>
-          </div>
-        ))}
+        {combatEffects.map(effect => {
+          const getEffectDisplay = () => {
+            switch (effect.type) {
+              case 'damage':
+              case 'actual_damage':
+                return { prefix: '-', icon: '💥' };
+              case 'blocked':
+                return { prefix: '🛡️', icon: '' };
+              case 'block':
+                return { prefix: effect.amount === 0 ? '완벽 방어!' : '+', icon: '🛡️' };
+              case 'heal':
+                return { prefix: '+', icon: '💚' };
+              default:
+                return { prefix: '', icon: '' };
+            }
+          };
+          const display = getEffectDisplay();
+
+          return (
+            <div
+              key={effect.id}
+              className={`combat-effect effect-${effect.type}`}
+              style={{ left: `${effect.x}%`, top: `${effect.y}%` }}
+            >
+              <div className="effect-burst" />
+              <span className="effect-amount">
+                {effect.type === 'blocked' ? (
+                  <>🛡️ -{effect.amount}</>
+                ) : effect.type === 'block' && effect.amount === 0 ? (
+                  <>완벽 방어!</>
+                ) : (
+                  <>{display.prefix}{effect.amount}</>
+                )}
+              </span>
+            </div>
+          );
+        })}
       </div>
 
       {/* 상단 헤더 */}

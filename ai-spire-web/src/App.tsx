@@ -9,11 +9,12 @@ import DeckManagementScreen from './components/DeckManagementScreen';
 
 interface CombatEffect {
   id: string;
-  type: 'damage' | 'block' | 'heal';
+  type: 'damage' | 'block' | 'heal' | 'blocked' | 'actual_damage';
   amount: number;
   targetId: string;
   x: number;
   y: number;
+  blockedAmount?: number; // 방어력으로 막은 피해
 }
 
 function App() {
@@ -88,6 +89,9 @@ function App() {
 
     setIsAnimating(true);
 
+    // 현재 플레이어 방어력 추적
+    let currentBlock = gameState.player.statusEffects.find(e => e.type === 'block')?.amount || 0;
+
     const attackingEnemies = gameState.enemies.filter(e => e.intent.type === 'attack');
     attackingEnemies.forEach((enemy, i) => {
       setTimeout(() => {
@@ -95,13 +99,34 @@ function App() {
         setTimeout(() => {
           setAttackingEnemyId(null);
           setPlayerHit(true);
-          showCombatEffect('damage', enemy.intent.amount, 'player', 85, 15);
+
+          const incomingDamage = enemy.intent.amount;
+          const blockedAmount = Math.min(currentBlock, incomingDamage);
+          const actualDamage = incomingDamage - blockedAmount;
+          currentBlock = Math.max(0, currentBlock - blockedAmount);
+
+          // 방어로 막은 양 표시 (있을 경우)
+          if (blockedAmount > 0) {
+            showCombatEffect('blocked', blockedAmount, 'player', 75, 12);
+          }
+          // 실제 받은 피해 표시
+          if (actualDamage > 0) {
+            setTimeout(() => {
+              showCombatEffect('actual_damage', actualDamage, 'player', 85, 18);
+            }, 150);
+          } else if (blockedAmount > 0 && actualDamage === 0) {
+            // 완전 방어 시
+            setTimeout(() => {
+              showCombatEffect('block', 0, 'player', 85, 18);
+            }, 150);
+          }
+
           setTimeout(() => setPlayerHit(false), 200);
         }, 200);
-      }, i * 400);
+      }, i * 500);
     });
 
-    const totalDelay = Math.max(300, attackingEnemies.length * 400 + 200);
+    const totalDelay = Math.max(300, attackingEnemies.length * 500 + 300);
 
     setTimeout(() => {
       const newState = endTurn(gameState);
