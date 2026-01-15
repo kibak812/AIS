@@ -1,0 +1,340 @@
+/* ===== 몬스터 스프라이트 래퍼 ===== */
+.monster-sprite-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.1s ease;
+}
+
+.monster-sprite-inner {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5));
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+.monster-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ===== 그림자 ===== */
+.monster-shadow {
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 15px;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.4) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+/* ===== 피격 효과 ===== */
+.monster-sprite-wrapper.hit {
+  animation: hitShake 0.15s ease-out;
+}
+
+.monster-sprite-wrapper.hit .monster-sprite-inner {
+  filter:
+    drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5))
+    drop-shadow(0 0 20px rgba(255, 50, 50, 0.8))
+    brightness(2);
+}
+
+@keyframes hitShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px) rotate(-2deg); }
+  40% { transform: translateX(8px) rotate(2deg); }
+  60% { transform: translateX(-6px) rotate(-1deg); }
+  80% { transform: translateX(4px) rotate(1deg); }
+}
+
+/* ===== 히트 이펙트 ===== */
+.hit-effect {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.hit-slash {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  height: 4px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.9) 20%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0.9) 80%,
+    transparent 100%
+  );
+  transform-origin: center;
+  animation: slashFade 0.2s ease-out forwards;
+  box-shadow:
+    0 0 10px rgba(255, 255, 255, 0.8),
+    0 0 20px rgba(255, 100, 100, 0.6);
+}
+
+.hit-slash-1 {
+  transform: translate(-50%, -50%) rotate(-45deg);
+  animation-delay: 0s;
+}
+
+.hit-slash-2 {
+  transform: translate(-50%, -50%) rotate(45deg);
+  animation-delay: 0.03s;
+}
+
+@keyframes slashFade {
+  0% {
+    opacity: 0;
+    width: 20%;
+  }
+  30% {
+    opacity: 1;
+    width: 100%;
+  }
+  100% {
+    opacity: 0;
+    width: 100%;
+  }
+}
+
+/* ===== 히트 파티클 ===== */
+.hit-particles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+}
+
+.hit-particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(135deg, #fff 0%, #ff6666 100%);
+  border-radius: 50%;
+  animation: particleBurst 0.4s ease-out forwards;
+  animation-delay: var(--delay);
+  box-shadow: 0 0 10px rgba(255, 100, 100, 0.8);
+}
+
+@keyframes particleBurst {
+  0% {
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateX(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateX(50px) scale(0);
+    opacity: 0;
+  }
+}
+
+/* ===== 공격 모션 ===== */
+.monster-sprite-wrapper.attacking {
+  animation: attackLunge 0.4s ease-out;
+}
+
+@keyframes attackLunge {
+  0% { transform: translateY(0) scale(1); }
+  20% { transform: translateY(-10px) scale(1.1); }
+  40% { transform: translateY(30px) scale(0.95); }
+  60% { transform: translateY(25px) scale(1); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+/* ===== 죽음 효과 ===== */
+.monster-sprite-wrapper.dead {
+  animation: deathFade 0.6s ease-out forwards;
+}
+
+@keyframes deathFade {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    filter: none;
+  }
+  50% {
+    transform: scale(1.1);
+    filter: brightness(3) saturate(0);
+  }
+  100% {
+    transform: scale(0.8) translateY(20px);
+    opacity: 0;
+    filter: brightness(3) saturate(0);
+  }
+}
+
+/* ===== 몬스터별 고유 애니메이션 ===== */
+
+/* 광신도 - 사악한 눈빛 */
+.cultist .evil-eye {
+  animation: evilGlow 2s ease-in-out infinite;
+}
+
+.cultist .cult-symbol {
+  animation: symbolPulse 3s ease-in-out infinite;
+}
+
+@keyframes evilGlow {
+  0%, 100% {
+    fill: #ff3333;
+    filter: drop-shadow(0 0 5px #ff0000);
+  }
+  50% {
+    fill: #ff6666;
+    filter: drop-shadow(0 0 15px #ff0000);
+  }
+}
+
+@keyframes symbolPulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; fill: #cc0000; }
+}
+
+/* 턱벌레 - 턱 움직임 */
+.jawworm .jaw-left {
+  animation: jawChomp 1.5s ease-in-out infinite;
+  transform-origin: right center;
+}
+
+.jawworm .jaw-right {
+  animation: jawChomp 1.5s ease-in-out infinite;
+  animation-delay: 0.1s;
+  transform-origin: left center;
+}
+
+.jawworm .angry-eye {
+  animation: angryPulse 0.8s ease-in-out infinite;
+}
+
+@keyframes jawChomp {
+  0%, 100% { transform: rotate(0deg); }
+  30% { transform: rotate(-8deg); }
+  60% { transform: rotate(5deg); }
+}
+
+@keyframes angryPulse {
+  0%, 100% { r: 2; fill: #ff6600; }
+  50% { r: 3; fill: #ff3300; }
+}
+
+/* 이 (Louse) - 다리 움직임 */
+.louse .leg {
+  animation: legWiggle 0.6s ease-in-out infinite;
+}
+
+.louse .leg:nth-child(odd) {
+  animation-delay: 0.15s;
+}
+
+.louse .bug-eye {
+  animation: bugEyeMove 2s ease-in-out infinite;
+}
+
+@keyframes legWiggle {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+}
+
+@keyframes bugEyeMove {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(1px); }
+}
+
+/* 뚱보 그렘린 - 숨쉬기 & 눈동자 */
+.fatgremlin {
+  animation: gremlinBreathe 2s ease-in-out infinite;
+}
+
+.fatgremlin .gremlin-pupil {
+  animation: gremlinLook 3s ease-in-out infinite;
+}
+
+@keyframes gremlinBreathe {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.03); }
+}
+
+@keyframes gremlinLook {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-1px); }
+  75% { transform: translateX(1px); }
+}
+
+/* 슬라임 - 물렁물렁 움직임 */
+.slime .slime-body {
+  animation: slimeWobble 2s ease-in-out infinite;
+}
+
+.slime .slime-pupil {
+  animation: slimePupil 4s ease-in-out infinite;
+}
+
+.slime .drip {
+  animation: slimeDrip 3s ease-in-out infinite;
+}
+
+.slime .drip:nth-child(2) {
+  animation-delay: 1.5s;
+}
+
+@keyframes slimeWobble {
+  0%, 100% {
+    rx: 35;
+    ry: 28;
+  }
+  25% {
+    rx: 33;
+    ry: 30;
+  }
+  50% {
+    rx: 36;
+    ry: 27;
+  }
+  75% {
+    rx: 34;
+    ry: 29;
+  }
+}
+
+@keyframes slimePupil {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-1px); }
+  70% { transform: translateY(1px); }
+}
+
+@keyframes slimeDrip {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(5px);
+    opacity: 0.4;
+  }
+}
+
+/* ===== 반응형 ===== */
+@media (max-width: 400px) {
+  .hit-particle {
+    width: 6px;
+    height: 6px;
+  }
+
+  @keyframes particleBurst {
+    100% {
+      transform: translate(-50%, -50%) rotate(var(--angle)) translateX(35px) scale(0);
+    }
+  }
+}

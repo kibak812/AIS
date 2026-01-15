@@ -1,4 +1,5 @@
-.hand-area {
+/* ===== 핸드 영역 프리미엄 ===== */
+.hand-area-premium {
   position: fixed;
   bottom: 0;
   left: 0;
@@ -6,44 +7,104 @@
   z-index: 100;
   padding-bottom: env(safe-area-inset-bottom, 10px);
   background: linear-gradient(to top,
-    rgba(0, 0, 0, 0.95) 0%,
-    rgba(0, 0, 0, 0.8) 40%,
-    rgba(0, 0, 0, 0.4) 70%,
+    rgba(10, 10, 20, 0.98) 0%,
+    rgba(15, 15, 30, 0.95) 30%,
+    rgba(20, 20, 40, 0.85) 60%,
     transparent 100%
   );
 }
 
-/* ===== 에너지 표시 ===== */
-.energy-display {
+/* ===== 에너지 오브 ===== */
+.energy-orb-container {
   position: absolute;
-  top: -50px;
+  top: -55px;
   left: 16px;
   z-index: 110;
 }
 
-.energy-orb {
+.energy-orb-premium {
+  position: relative;
+  width: 70px;
+  height: 70px;
+}
+
+.orb-outer-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 3px solid transparent;
+  border-radius: 50%;
+  background: linear-gradient(145deg, rgba(243, 156, 18, 0.6), rgba(230, 126, 34, 0.6)) border-box;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: orbRingSpin 8s linear infinite;
+}
+
+@keyframes orbRingSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.orb-inner {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  background: linear-gradient(160deg,
+    #2c3e50 0%,
+    #1a252f 50%,
+    #0d1318 100%
+  );
+  border-radius: 50%;
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 10px 16px;
-  background: linear-gradient(145deg, #2d3436 0%, #1e272e 100%);
-  border-radius: 25px;
-  border: 3px solid #f39c12;
+  justify-content: center;
   box-shadow:
-    0 0 20px rgba(243, 156, 18, 0.4),
-    inset 0 2px 4px rgba(255, 255, 255, 0.1);
+    0 0 25px rgba(243, 156, 18, 0.4),
+    inset 0 3px 8px rgba(255, 255, 255, 0.1),
+    inset 0 -3px 8px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
 }
 
-.energy-icon {
-  font-size: 22px;
-  filter: drop-shadow(0 0 5px #f39c12);
+.orb-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 30%,
+    rgba(243, 156, 18, 0.3) 0%,
+    transparent 50%
+  );
 }
 
-.energy-value {
-  font-size: 24px;
-  font-weight: bold;
+.orb-content {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  z-index: 2;
+}
+
+.energy-current {
+  font-size: 28px;
+  font-weight: 800;
   color: #f39c12;
-  text-shadow: 0 0 10px rgba(243, 156, 18, 0.5);
+  text-shadow:
+    0 0 15px rgba(243, 156, 18, 0.8),
+    0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.energy-divider {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0 2px;
 }
 
 .energy-max {
@@ -51,8 +112,39 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
+.orb-particles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+}
+
+.orb-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #f39c12;
+  border-radius: 50%;
+  transform: rotate(var(--angle)) translateY(-25px);
+  animation: orbParticleFloat 3s ease-in-out infinite;
+  animation-delay: var(--delay);
+  box-shadow: 0 0 8px rgba(243, 156, 18, 0.8);
+}
+
+@keyframes orbParticleFloat {
+  0%, 100% {
+    opacity: 0.3;
+    transform: rotate(var(--angle)) translateY(-22px);
+  }
+  50% {
+    opacity: 0.8;
+    transform: rotate(var(--angle)) translateY(-28px);
+  }
+}
+
 /* ===== 카드 컨테이너 ===== */
-.hand-container {
+.hand-container-premium {
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
@@ -60,266 +152,451 @@
   scroll-behavior: smooth;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  padding: 15px 0 10px;
+  padding: 20px 0 15px;
 }
 
-.hand-container::-webkit-scrollbar {
+.hand-container-premium::-webkit-scrollbar {
   display: none;
 }
 
-.hand-scroll {
+.hand-scroll-premium {
   display: flex;
-  gap: 12px;
-  padding: 10px 16px 5px;
+  gap: 14px;
+  padding: 15px 16px 10px;
   min-width: min-content;
 }
 
-/* ===== 카드 ===== */
-.card {
+/* ===== 프리미엄 카드 ===== */
+.card-premium {
   position: relative;
   flex-shrink: 0;
-  width: 105px;
-  height: 145px;
-  border-radius: 12px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  box-shadow:
-    0 8px 25px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  width: 115px;
+  height: 160px;
+  border-radius: 14px;
+  background: var(--card-bg);
+  border: 3px solid var(--card-border);
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-  animation: card-enter 0.3s ease-out backwards;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: cardDeal 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+  animation-delay: calc(var(--card-index) * 0.08s);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    0 5px 15px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
   overflow: hidden;
 }
 
-@keyframes card-enter {
-  from {
+@keyframes cardDeal {
+  0% {
     opacity: 0;
-    transform: translateY(30px) scale(0.9);
+    transform: translateY(50px) rotateX(-20deg) scale(0.8);
   }
-  to {
+  60% {
+    transform: translateY(-10px) rotateX(5deg) scale(1.02);
+  }
+  100% {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0) rotateX(0) scale(1);
   }
 }
 
-.card:active:not(.unaffordable):not(.disabled) {
-  transform: translateY(-10px) scale(1.02);
+.card-premium:active:not(.unaffordable):not(.disabled) {
+  transform: translateY(-15px) scale(1.03);
 }
 
-.card.selected {
-  transform: translateY(-20px) scale(1.05);
+.card-premium.hovered:not(.unaffordable):not(.disabled) {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.6),
+    0 10px 30px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+.card-premium.selected {
+  transform: translateY(-25px) scale(1.08);
   border-color: #ffd700;
   box-shadow:
-    0 15px 40px rgba(255, 215, 0, 0.4),
-    0 0 30px rgba(255, 215, 0, 0.3),
+    0 25px 60px rgba(255, 215, 0, 0.3),
+    0 0 40px rgba(255, 215, 0, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
   z-index: 10;
 }
 
-.card.unaffordable {
+.card-premium.unaffordable {
   opacity: 0.5;
-  filter: grayscale(0.6) brightness(0.7);
+  filter: grayscale(0.7) brightness(0.6);
   cursor: not-allowed;
 }
 
-.card.disabled {
+.card-premium.disabled {
   pointer-events: none;
 }
 
-/* ===== 카드 코스트 ===== */
-.card-cost {
+/* ===== 카드 광택 ===== */
+.card-shine {
   position: absolute;
-  top: -8px;
-  left: -8px;
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(145deg, #2d3436 0%, #1e272e 100%);
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.15),
+    transparent
+  );
+  transform: skewX(-20deg);
+  pointer-events: none;
+}
+
+.card-premium.hovered .card-shine,
+.card-premium.selected .card-shine {
+  animation: shineSwipe 0.6s ease-out;
+}
+
+@keyframes shineSwipe {
+  to { left: 150%; }
+}
+
+/* ===== 코스트 보석 ===== */
+.cost-gem {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(160deg,
+    #f39c12 0%,
+    #d68910 50%,
+    #b9770e 100%
+  );
   border-radius: 50%;
-  border: 3px solid #f39c12;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
-  font-weight: bold;
-  color: #f39c12;
   z-index: 5;
+  border: 3px solid rgba(255, 255, 255, 0.3);
   box-shadow:
-    0 4px 10px rgba(0, 0, 0, 0.4),
+    0 4px 15px rgba(243, 156, 18, 0.5),
+    inset 0 2px 4px rgba(255, 255, 255, 0.4),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.cost-gem.depleted {
+  background: linear-gradient(160deg,
+    #7f8c8d 0%,
+    #616a6b 50%,
+    #424949 100%
+  );
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.3),
     inset 0 2px 4px rgba(255, 255, 255, 0.1);
 }
 
-.card-cost.insufficient {
-  border-color: #e74c3c;
-  color: #e74c3c;
-}
-
-/* ===== 카드 테두리 광채 ===== */
-.card-border-glow {
+.gem-glow {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 10px;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  top: 5px;
+  left: 5px;
+  width: 12px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  filter: blur(2px);
 }
 
-.card:active:not(.unaffordable) .card-border-glow,
-.card.selected .card-border-glow {
-  opacity: 1;
-  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.3);
+.cost-gem.depleted .gem-glow {
+  opacity: 0.3;
 }
 
-/* ===== 카드 내용 ===== */
-.card-content {
+.gem-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+/* ===== 희귀도 배지 ===== */
+.rarity-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  z-index: 5;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+}
+
+.rarity-badge.uncommon {
+  background: linear-gradient(145deg, #5dade2, #2980b9);
+  color: #fff;
+}
+
+.rarity-badge.rare {
+  background: linear-gradient(145deg, #ffd700, #f39c12);
+  color: #fff;
+  animation: raritySparkle 2s ease-in-out infinite;
+}
+
+@keyframes raritySparkle {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.3); }
+}
+
+/* ===== 카드 프레임 ===== */
+.card-frame {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 12px 10px 8px;
+  padding: 14px 10px 10px;
+  position: relative;
 }
 
-.card-header {
+.frame-ornament {
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 30%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0.4) 70%,
+    transparent 100%
+  );
+}
+
+.frame-ornament.top {
+  top: 10px;
+}
+
+.frame-ornament.bottom {
+  bottom: 8px;
+}
+
+/* ===== 카드 헤더 ===== */
+.card-header-premium {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   margin-bottom: 6px;
-  padding-left: 20px;
+  padding-left: 22px;
 }
 
-.card-type-icon {
+.card-icon {
   font-size: 14px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
 }
 
-.card-name {
+.card-title {
   font-size: 13px;
-  font-weight: bold;
-  color: white;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  font-weight: 700;
+  color: #fff;
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.8),
+    0 0 10px rgba(255, 255, 255, 0.2);
+  font-family: 'Segoe UI', system-ui, sans-serif;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.card-description {
-  flex: 1;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.9);
-  text-align: center;
-  line-height: 1.4;
-  padding: 4px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+/* ===== 카드 아트 영역 ===== */
+.card-art-area {
+  height: 35px;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
-.card-footer {
-  padding-top: 6px;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+.art-pattern {
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 60%),
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 4px,
+      rgba(255, 255, 255, 0.03) 4px,
+      rgba(255, 255, 255, 0.03) 8px
+    );
 }
 
-.card-type {
-  display: block;
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.7);
+/* ===== 카드 설명 ===== */
+.card-description-premium {
+  flex: 1;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.95);
   text-align: center;
+  line-height: 1.4;
+  padding: 4px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+/* ===== 타입 태그 ===== */
+.card-type-tag {
+  padding-top: 6px;
+  text-align: center;
+}
+
+.card-type-tag span {
+  display: inline-block;
+  padding: 3px 12px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.8);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-/* ===== 카드 선택 광채 ===== */
-.card-selected-glow {
+/* ===== 선택 오라 ===== */
+.selection-aura {
   position: absolute;
-  top: -5px;
-  left: -5px;
-  right: -5px;
-  bottom: -5px;
-  border-radius: 15px;
-  background: transparent;
-  box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
   pointer-events: none;
-  animation: selected-pulse 1.5s ease-in-out infinite;
 }
 
-@keyframes selected-pulse {
+.aura-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 20px;
+  border: 2px solid rgba(255, 215, 0, 0.6);
+  box-shadow:
+    0 0 30px rgba(255, 215, 0, 0.5),
+    inset 0 0 20px rgba(255, 215, 0, 0.2);
+  animation: auraRingPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes auraRingPulse {
   0%, 100% {
-    box-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
+    opacity: 0.6;
+    transform: scale(1);
   }
   50% {
-    box-shadow: 0 0 35px rgba(255, 215, 0, 0.7);
+    opacity: 1;
+    transform: scale(1.02);
   }
 }
 
-/* ===== 스크롤 힌트 ===== */
-.scroll-hint {
+/* ===== 스크롤 인디케이터 ===== */
+.scroll-indicator {
   position: absolute;
-  bottom: 5px;
+  bottom: 8px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 4px 12px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 15px;
   font-size: 11px;
   color: rgba(255, 255, 255, 0.5);
   pointer-events: none;
-  animation: hint-fade 3s ease-in-out infinite;
+  animation: scrollFade 2.5s ease-in-out infinite;
 }
 
-@keyframes hint-fade {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.7; }
+.scroll-arrow {
+  font-size: 14px;
+  font-weight: bold;
+  animation: arrowBounce 1.5s ease-in-out infinite;
+}
+
+.scroll-arrow.left {
+  animation-direction: reverse;
+}
+
+@keyframes arrowBounce {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(4px); }
+}
+
+@keyframes scrollFade {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
 }
 
 /* ===== 반응형 ===== */
 @media (max-width: 360px) {
-  .card {
-    width: 95px;
-    height: 130px;
+  .card-premium {
+    width: 100px;
+    height: 140px;
   }
 
-  .card-name {
+  .card-title {
     font-size: 12px;
   }
 
-  .card-description {
+  .card-description-premium {
     font-size: 10px;
   }
 
-  .hand-scroll {
+  .hand-scroll-premium {
     gap: 10px;
-    padding: 10px 12px 5px;
+    padding: 10px 12px 8px;
   }
 
-  .energy-orb {
-    padding: 8px 12px;
+  .energy-orb-premium {
+    width: 60px;
+    height: 60px;
   }
 
-  .energy-icon {
+  .energy-current {
+    font-size: 24px;
+  }
+
+  .cost-gem {
+    width: 35px;
+    height: 35px;
+  }
+
+  .gem-value {
     font-size: 18px;
-  }
-
-  .energy-value {
-    font-size: 20px;
   }
 }
 
 @media (min-width: 500px) {
-  .card {
-    width: 120px;
-    height: 160px;
+  .card-premium {
+    width: 130px;
+    height: 180px;
   }
 
-  .card-name {
+  .card-title {
     font-size: 14px;
   }
 
-  .card-description {
+  .card-description-premium {
     font-size: 12px;
   }
 
-  .hand-scroll {
+  .hand-scroll-premium {
     justify-content: center;
+  }
+
+  .card-art-area {
+    height: 45px;
   }
 }
