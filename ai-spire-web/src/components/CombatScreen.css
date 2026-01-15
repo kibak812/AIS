@@ -232,7 +232,7 @@
 /* ===== 하단 컨트롤 (레이아웃 수정) ===== */
 .combat-footer {
   position: absolute;
-  bottom: 180px; /* 핸드 영역 위에 배치 */
+  bottom: 220px; /* 핸드 영역 위에 충분한 여백 */
   left: 0;
   right: 0;
   z-index: 20;
@@ -554,7 +554,7 @@
 /* ===== 반응형 ===== */
 @media (max-width: 480px) {
   .combat-footer {
-    bottom: 140px;
+    bottom: 200px;
     padding: 0 8px;
     flex-wrap: wrap;
     gap: 8px;
