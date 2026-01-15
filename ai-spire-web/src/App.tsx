@@ -55,13 +55,11 @@ function App() {
 
     setIsAnimating(true);
 
-    // 타격 이펙트 표시
     if (targetEnemyId) {
       setHitEnemyId(targetEnemyId);
       setTimeout(() => setHitEnemyId(null), 200);
     }
 
-    // 이펙트 표시
     card.effects.forEach(effect => {
       if (effect.type === 'damage' && targetEnemyId) {
         showCombatEffect('damage', effect.amount, targetEnemyId, 50 + Math.random() * 10 - 5, 35);
@@ -76,7 +74,6 @@ function App() {
       }
     });
 
-    // 약간의 딜레이 후 상태 업데이트
     setTimeout(() => {
       const newState = playCard(gameState, cardId, targetEnemyId);
       setGameState(newState);
@@ -91,7 +88,6 @@ function App() {
 
     setIsAnimating(true);
 
-    // 적 공격 애니메이션
     const attackingEnemies = gameState.enemies.filter(e => e.intent.type === 'attack');
     attackingEnemies.forEach((enemy, i) => {
       setTimeout(() => {
@@ -174,24 +170,43 @@ function App() {
   };
 
   const handleOpenDeckManagement = () => {
-    setGameState(prev => ({ ...prev, phase: 'deckManagement' }));
+    if (gameState.deckManagementUsedThisFloor) {
+      return;
+    }
+    setGameState(prev => ({
+      ...prev,
+      phase: 'deckManagement',
+      deckManagementUsedThisFloor: true
+    }));
   };
 
-  const handleRemoveCard = (cardId: string) => {
+  const handleRemoveCard = (cardId: string, hpCost: number) => {
     setGameState(prev => ({
       ...prev,
       player: {
         ...prev.player,
+        currentHp: Math.max(1, prev.player.currentHp - hpCost),
         deck: prev.player.deck.filter(c => c.id !== cardId),
         drawPile: prev.player.drawPile.filter(c => c.id !== cardId),
         discardPile: prev.player.discardPile.filter(c => c.id !== cardId),
-      }
+      },
+      cardsRemovedThisFloor: prev.cardsRemovedThisFloor + 1,
     }));
   };
 
-  const handleAddAICard = (card: Card) => {
+  const handleAddAICard = (card: Card, hpCost: number) => {
     const newCard = { ...card, id: generateCardId() };
-    setGameState(prev => addCardToDeck(prev, newCard));
+    setGameState(prev => {
+      const updated = addCardToDeck(prev, newCard);
+      return {
+        ...updated,
+        player: {
+          ...updated.player,
+          currentHp: Math.max(1, updated.player.currentHp - hpCost),
+        },
+        aiCardsGeneratedThisFloor: prev.aiCardsGeneratedThisFloor + 1,
+      };
+    });
   };
 
   const handleCompleteDeckManagement = () => {
@@ -207,7 +222,7 @@ function App() {
           <h1 className="game-over-title">패배</h1>
           <div className="game-over-stats">
             <div className="stat-item">
-              <span className="stat-label">도달 층수</span>
+              <span className="stat-label">도달 층</span>
               <span className="stat-value">{gameState.floor}</span>
             </div>
             <div className="stat-item">
@@ -222,7 +237,7 @@ function App() {
               setGameState({ ...newState, rewardCards: [] });
             }}
           >
-            <span>다시 도전하기</span>
+            <span>다시 도전</span>
             <span className="restart-icon">⚔️</span>
           </button>
         </div>
@@ -246,6 +261,7 @@ function App() {
           onSelectEnemy={handleSelectEnemy}
           onEndTurn={handleEndTurn}
           onOpenDeckManagement={handleOpenDeckManagement}
+          deckManagementUsed={gameState.deckManagementUsedThisFloor}
         />
       ) : gameState.phase === 'reward' ? (
         <RewardScreen
@@ -256,6 +272,9 @@ function App() {
       ) : gameState.phase === 'deckManagement' ? (
         <DeckManagementScreen
           deck={gameState.player.deck}
+          playerHp={gameState.player.currentHp}
+          cardsRemovedThisFloor={gameState.cardsRemovedThisFloor}
+          aiCardsGeneratedThisFloor={gameState.aiCardsGeneratedThisFloor}
           onRemoveCard={handleRemoveCard}
           onAddAICard={handleAddAICard}
           onComplete={handleCompleteDeckManagement}

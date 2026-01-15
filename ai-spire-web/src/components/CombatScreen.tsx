@@ -26,6 +26,7 @@ interface CombatScreenProps {
   onSelectEnemy: (enemyId: string) => void;
   onEndTurn: () => void;
   onOpenDeckManagement: () => void;
+  deckManagementUsed: boolean;
 }
 
 function CombatScreen({
@@ -41,6 +42,7 @@ function CombatScreen({
   onSelectEnemy,
   onEndTurn,
   onOpenDeckManagement,
+  deckManagementUsed,
 }: CombatScreenProps) {
   return (
     <div className="combat-screen">
@@ -118,11 +120,12 @@ function CombatScreen({
             </div>
           </div>
           <button
-            className="deck-management-btn"
+            className={`deck-management-btn ${deckManagementUsed ? 'used' : ''}`}
             onClick={onOpenDeckManagement}
-            title="덱 정비"
+            disabled={deckManagementUsed}
+            title={deckManagementUsed ? "이번 층에서 이미 사용함" : "덱 정비"}
           >
-            <span className="dm-icon">⚙️</span>
+            <span className="dm-icon">{deckManagementUsed ? '✓' : '⚙️'}</span>
           </button>
         </div>
 

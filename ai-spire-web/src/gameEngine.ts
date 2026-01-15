@@ -37,6 +37,9 @@ export function createInitialGameState(): GameState {
     phase: 'combat',
     floor: 1,
     turnCount: 0,
+    deckManagementUsedThisFloor: false,
+    cardsRemovedThisFloor: 0,
+    aiCardsGeneratedThisFloor: 0,
   };
 
   // Draw initial hand
@@ -371,6 +374,9 @@ export function startNextFloor(state: GameState): GameState {
   newState.enemies = createEnemyGroup(newState.floor);
   newState.phase = 'combat';
   newState.turnCount = 0;
+  newState.deckManagementUsedThisFloor = false;
+  newState.cardsRemovedThisFloor = 0;
+  newState.aiCardsGeneratedThisFloor = 0;
 
   let player = { ...newState.player };
   player.hand = [];

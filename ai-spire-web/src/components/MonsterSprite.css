@@ -1,3 +1,9 @@
+/* ===== 픽셀 아트 스타일 ===== */
+.pixel-art {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
 /* ===== 몬스터 스프라이트 래퍼 ===== */
 .monster-sprite-wrapper {
   position: relative;
@@ -6,54 +12,63 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: transform 0.1s ease;
+  transition: transform 0.1s steps(2);
+}
+
+.monster-sprite-wrapper.pixel-style {
+  image-rendering: pixelated;
 }
 
 .monster-sprite-inner {
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5));
-  transition: filter 0.15s ease, transform 0.15s ease;
+  transition: filter 0.1s steps(2), transform 0.1s steps(2);
 }
 
 .monster-svg {
   width: 100%;
   height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
-/* ===== 그림자 ===== */
+.monster-svg.pixel-art {
+  shape-rendering: crispEdges;
+}
+
+/* ===== 픽셀 그림자 ===== */
 .monster-shadow {
   position: absolute;
-  bottom: -5px;
+  bottom: -4px;
   left: 50%;
   transform: translateX(-50%);
-  width: 70%;
-  height: 15px;
-  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.4) 0%, transparent 70%);
-  border-radius: 50%;
+  width: 60%;
+  height: 8px;
+  background: #000;
+  opacity: 0.4;
 }
 
-/* ===== 피격 효과 ===== */
+.pixel-shadow {
+  clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+}
+
+/* ===== 피격 효과 (픽셀 스타일) ===== */
 .monster-sprite-wrapper.hit {
-  animation: hitShake 0.15s ease-out;
+  animation: pixelHitShake 0.15s steps(4) ease-out;
 }
 
 .monster-sprite-wrapper.hit .monster-sprite-inner {
-  filter:
-    drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5))
-    drop-shadow(0 0 20px rgba(255, 50, 50, 0.8))
-    brightness(2);
+  filter: brightness(3) contrast(1.2);
 }
 
-@keyframes hitShake {
+@keyframes pixelHitShake {
   0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-8px) rotate(-2deg); }
-  40% { transform: translateX(8px) rotate(2deg); }
-  60% { transform: translateX(-6px) rotate(-1deg); }
-  80% { transform: translateX(4px) rotate(1deg); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-2px); }
 }
 
-/* ===== 히트 이펙트 ===== */
+/* ===== 픽셀 히트 이펙트 ===== */
 .hit-effect {
   position: absolute;
   top: 50%;
@@ -64,52 +79,24 @@
   pointer-events: none;
 }
 
-.hit-slash {
+.pixel-hit .pixel-flash {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 80%;
-  height: 4px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.9) 20%,
-    rgba(255, 255, 255, 1) 50%,
-    rgba(255, 255, 255, 0.9) 80%,
-    transparent 100%
-  );
-  transform-origin: center;
-  animation: slashFade 0.2s ease-out forwards;
-  box-shadow:
-    0 0 10px rgba(255, 255, 255, 0.8),
-    0 0 20px rgba(255, 100, 100, 0.6);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  opacity: 0;
+  animation: pixelFlash 0.15s steps(2) forwards;
 }
 
-.hit-slash-1 {
-  transform: translate(-50%, -50%) rotate(-45deg);
-  animation-delay: 0s;
+@keyframes pixelFlash {
+  0% { opacity: 0.8; }
+  50% { opacity: 0.4; }
+  100% { opacity: 0; }
 }
 
-.hit-slash-2 {
-  transform: translate(-50%, -50%) rotate(45deg);
-  animation-delay: 0.03s;
-}
-
-@keyframes slashFade {
-  0% {
-    opacity: 0;
-    width: 20%;
-  }
-  30% {
-    opacity: 1;
-    width: 100%;
-  }
-  100% {
-    opacity: 0;
-    width: 100%;
-  }
-}
-
-/* ===== 히트 파티클 ===== */
+/* ===== 픽셀 파티클 ===== */
 .hit-particles {
   position: absolute;
   top: 50%;
@@ -118,223 +105,194 @@
   height: 0;
 }
 
-.hit-particle {
+.hit-particle.pixel-particle {
   position: absolute;
-  width: 8px;
-  height: 8px;
-  background: linear-gradient(135deg, #fff 0%, #ff6666 100%);
-  border-radius: 50%;
-  animation: particleBurst 0.4s ease-out forwards;
+  width: 6px;
+  height: 6px;
+  background: #ff4444;
+  animation: pixelParticleBurst 0.3s steps(4) ease-out forwards;
   animation-delay: var(--delay);
-  box-shadow: 0 0 10px rgba(255, 100, 100, 0.8);
 }
 
-@keyframes particleBurst {
+@keyframes pixelParticleBurst {
   0% {
-    transform: translate(-50%, -50%) rotate(var(--angle)) translateX(0) scale(1);
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateX(0);
     opacity: 1;
   }
   100% {
-    transform: translate(-50%, -50%) rotate(var(--angle)) translateX(50px) scale(0);
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateX(30px);
     opacity: 0;
   }
 }
 
-/* ===== 공격 모션 ===== */
+/* ===== 공격 모션 (픽셀 스타일) ===== */
 .monster-sprite-wrapper.attacking {
-  animation: attackLunge 0.4s ease-out;
+  animation: pixelAttackLunge 0.4s steps(4) ease-out;
 }
 
-@keyframes attackLunge {
+@keyframes pixelAttackLunge {
   0% { transform: translateY(0) scale(1); }
-  20% { transform: translateY(-10px) scale(1.1); }
-  40% { transform: translateY(30px) scale(0.95); }
-  60% { transform: translateY(25px) scale(1); }
+  25% { transform: translateY(-8px) scale(1.1); }
+  50% { transform: translateY(20px) scale(0.95); }
+  75% { transform: translateY(16px) scale(1); }
   100% { transform: translateY(0) scale(1); }
 }
 
-/* ===== 죽음 효과 ===== */
+/* ===== 죽음 효과 (픽셀 스타일) ===== */
 .monster-sprite-wrapper.dead {
-  animation: deathFade 0.6s ease-out forwards;
+  animation: pixelDeathFade 0.5s steps(5) ease-out forwards;
 }
 
-@keyframes deathFade {
+@keyframes pixelDeathFade {
   0% {
     transform: scale(1);
     opacity: 1;
     filter: none;
   }
-  50% {
+  40% {
     transform: scale(1.1);
-    filter: brightness(3) saturate(0);
+    filter: brightness(3);
   }
   100% {
-    transform: scale(0.8) translateY(20px);
+    transform: scale(0.8) translateY(10px);
     opacity: 0;
-    filter: brightness(3) saturate(0);
+    filter: brightness(3);
   }
 }
 
-/* ===== 몬스터별 고유 애니메이션 ===== */
+/* ===== 몬스터별 고유 애니메이션 (픽셀 버전) ===== */
 
-/* 광신도 - 사악한 눈빛 */
+/* 광신도 - 사악한 눈빛 깜박임 */
 .cultist .evil-eye {
-  animation: evilGlow 2s ease-in-out infinite;
+  animation: pixelEvilGlow 1s steps(2) infinite;
 }
 
 .cultist .cult-symbol {
-  animation: symbolPulse 3s ease-in-out infinite;
+  animation: pixelSymbolPulse 2s steps(2) infinite;
 }
 
-@keyframes evilGlow {
-  0%, 100% {
-    fill: #ff3333;
-    filter: drop-shadow(0 0 5px #ff0000);
-  }
-  50% {
-    fill: #ff6666;
-    filter: drop-shadow(0 0 15px #ff0000);
-  }
+@keyframes pixelEvilGlow {
+  0%, 100% { fill: #ff0000; }
+  50% { fill: #ff6666; }
 }
 
-@keyframes symbolPulse {
+@keyframes pixelSymbolPulse {
   0%, 100% { opacity: 0.8; }
   50% { opacity: 1; fill: #cc0000; }
 }
 
 /* 턱벌레 - 턱 움직임 */
-.jawworm .jaw-left {
-  animation: jawChomp 1.5s ease-in-out infinite;
-  transform-origin: right center;
-}
-
+.jawworm .jaw-left,
 .jawworm .jaw-right {
-  animation: jawChomp 1.5s ease-in-out infinite;
-  animation-delay: 0.1s;
-  transform-origin: left center;
+  animation: pixelJawChomp 1s steps(2) infinite;
 }
 
 .jawworm .angry-eye {
-  animation: angryPulse 0.8s ease-in-out infinite;
+  animation: pixelAngryPulse 0.5s steps(2) infinite;
 }
 
-@keyframes jawChomp {
-  0%, 100% { transform: rotate(0deg); }
-  30% { transform: rotate(-8deg); }
-  60% { transform: rotate(5deg); }
+@keyframes pixelJawChomp {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(1px); }
 }
 
-@keyframes angryPulse {
-  0%, 100% { r: 2; fill: #ff6600; }
-  50% { r: 3; fill: #ff3300; }
+@keyframes pixelAngryPulse {
+  0%, 100% { fill: #ff6600; }
+  50% { fill: #ff3300; }
 }
 
 /* 이 (Louse) - 다리 움직임 */
 .louse .leg {
-  animation: legWiggle 0.6s ease-in-out infinite;
+  animation: pixelLegWiggle 0.4s steps(2) infinite;
 }
 
 .louse .leg:nth-child(odd) {
-  animation-delay: 0.15s;
+  animation-delay: 0.1s;
 }
 
 .louse .bug-eye {
-  animation: bugEyeMove 2s ease-in-out infinite;
+  animation: pixelBugEyeMove 1.5s steps(2) infinite;
 }
 
-@keyframes legWiggle {
-  0%, 100% { transform: rotate(-5deg); }
-  50% { transform: rotate(5deg); }
+@keyframes pixelLegWiggle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(1px); }
 }
 
-@keyframes bugEyeMove {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(1px); }
+@keyframes pixelBugEyeMove {
+  0%, 100% { fill: #90ee90; }
+  50% { fill: #7cfc00; }
 }
 
-/* 뚱보 그렘린 - 숨쉬기 & 눈동자 */
+/* 뚱보 그렘린 - 숨쉬기 */
 .fatgremlin {
-  animation: gremlinBreathe 2s ease-in-out infinite;
+  animation: pixelGremlinBreathe 1.5s steps(2) infinite;
 }
 
 .fatgremlin .gremlin-pupil {
-  animation: gremlinLook 3s ease-in-out infinite;
+  animation: pixelGremlinLook 2s steps(3) infinite;
 }
 
-@keyframes gremlinBreathe {
+@keyframes pixelGremlinBreathe {
   0%, 100% { transform: scaleY(1); }
-  50% { transform: scaleY(1.03); }
+  50% { transform: scaleY(1.02); }
 }
 
-@keyframes gremlinLook {
+@keyframes pixelGremlinLook {
   0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-1px); }
-  75% { transform: translateX(1px); }
+  33% { transform: translateX(-1px); }
+  66% { transform: translateX(1px); }
 }
 
 /* 슬라임 - 물렁물렁 움직임 */
-.slime .slime-body {
-  animation: slimeWobble 2s ease-in-out infinite;
+.slime {
+  animation: pixelSlimeWobble 1.5s steps(3) infinite;
 }
 
 .slime .slime-pupil {
-  animation: slimePupil 4s ease-in-out infinite;
+  animation: pixelSlimePupil 2s steps(2) infinite;
 }
 
 .slime .drip {
-  animation: slimeDrip 3s ease-in-out infinite;
+  animation: pixelSlimeDrip 2s steps(3) infinite;
 }
 
 .slime .drip:nth-child(2) {
-  animation-delay: 1.5s;
+  animation-delay: 1s;
 }
 
-@keyframes slimeWobble {
-  0%, 100% {
-    rx: 35;
-    ry: 28;
-  }
-  25% {
-    rx: 33;
-    ry: 30;
-  }
-  50% {
-    rx: 36;
-    ry: 27;
-  }
-  75% {
-    rx: 34;
-    ry: 29;
-  }
+@keyframes pixelSlimeWobble {
+  0%, 100% { transform: scaleX(1) scaleY(1); }
+  33% { transform: scaleX(0.98) scaleY(1.02); }
+  66% { transform: scaleX(1.02) scaleY(0.98); }
 }
 
-@keyframes slimePupil {
+@keyframes pixelSlimePupil {
   0%, 100% { transform: translateY(0); }
-  30% { transform: translateY(-1px); }
-  70% { transform: translateY(1px); }
+  50% { transform: translateY(1px); }
 }
 
-@keyframes slimeDrip {
+@keyframes pixelSlimeDrip {
   0%, 100% {
     transform: translateY(0);
-    opacity: 0.7;
+    opacity: 0.8;
   }
   50% {
-    transform: translateY(5px);
+    transform: translateY(2px);
     opacity: 0.4;
   }
 }
 
 /* ===== 반응형 ===== */
 @media (max-width: 400px) {
-  .hit-particle {
-    width: 6px;
-    height: 6px;
+  .hit-particle.pixel-particle {
+    width: 4px;
+    height: 4px;
   }
 
-  @keyframes particleBurst {
+  @keyframes pixelParticleBurst {
     100% {
-      transform: translate(-50%, -50%) rotate(var(--angle)) translateX(35px) scale(0);
+      transform: translate(-50%, -50%) rotate(var(--angle)) translateX(20px);
     }
   }
 }
