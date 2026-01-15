@@ -25,19 +25,24 @@ export function createInitialGameState(): GameState {
     deck: [...deck],
     hand: [],
     discardPile: [],
-    drawPile: [...deck],
+    drawPile: shuffleDeck([...deck]),
     relics: [],
   };
 
   const enemies = createEnemyGroup(1);
 
-  return {
+  let initialState: GameState = {
     player,
     enemies,
     phase: 'combat',
     floor: 1,
     turnCount: 0,
   };
+
+  // Draw initial hand
+  initialState = drawCards(initialState, 5);
+
+  return initialState;
 }
 
 export function shuffleDeck(cards: Card[]): Card[] {
@@ -51,22 +56,33 @@ export function shuffleDeck(cards: Card[]): Card[] {
 
 export function drawCards(state: GameState, count: number): GameState {
   const newState = { ...state };
-  const player = { ...newState.player };
+  let player = { ...newState.player };
+  let drawPile = [...player.drawPile];
+  let discardPile = [...player.discardPile];
+  let hand = [...player.hand];
 
   for (let i = 0; i < count; i++) {
-    if (player.drawPile.length === 0) {
-      if (player.discardPile.length === 0) {
+    if (drawPile.length === 0) {
+      if (discardPile.length === 0) {
         break;
       }
-      player.drawPile = shuffleDeck([...player.discardPile]);
-      player.discardPile = [];
+      drawPile = shuffleDeck(discardPile);
+      discardPile = [];
     }
 
-    if (player.drawPile.length > 0) {
-      const card = player.drawPile.shift()!;
-      player.hand = [...player.hand, card];
+    if (drawPile.length > 0) {
+      const card = drawPile[0];
+      drawPile = drawPile.slice(1);
+      hand = [...hand, card];
     }
   }
+
+  player = {
+    ...player,
+    hand,
+    drawPile,
+    discardPile,
+  };
 
   newState.player = player;
   return newState;

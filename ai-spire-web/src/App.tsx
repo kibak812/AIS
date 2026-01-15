@@ -37,8 +37,23 @@ function App() {
   const handleSelectCard = (cardId: string) => {
     if (selectedCardId === cardId) {
       setSelectedCardId(null);
-    } else {
+      return;
+    }
+
+    const card = gameState.player.hand.find((c) => c.id === cardId);
+    if (!card) return;
+
+    // Check if card needs a target
+    const needsTarget = card.effects.some(
+      (effect) => effect.target === 'enemy'
+    );
+
+    if (needsTarget && gameState.enemies.length > 0) {
+      // Select card and wait for enemy selection
       setSelectedCardId(cardId);
+    } else {
+      // Play card immediately (AOE or self-target)
+      handlePlayCard(cardId, gameState.enemies[0]?.id);
     }
   };
 
@@ -57,7 +72,10 @@ function App() {
     if (!card) return;
 
     let newState = { ...gameState };
-    newState.player.deck = [...newState.player.deck, card];
+    newState.player = {
+      ...newState.player,
+      deck: [...newState.player.deck, card],
+    };
     newState = startNextFloor(newState);
     setGameState(newState);
   };
