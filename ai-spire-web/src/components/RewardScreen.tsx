@@ -26,11 +26,29 @@ function RewardScreen({ cards, onSelectCard, onSkip }: RewardScreenProps) {
     return colors[rarity] || colors.common;
   };
 
+  const getRarityText = (rarity: string): string => {
+    const rarityText: { [key: string]: string } = {
+      common: '일반',
+      uncommon: '고급',
+      rare: '희귀',
+    };
+    return rarityText[rarity] || rarity;
+  };
+
+  const getTypeText = (type: string): string => {
+    const typeText: { [key: string]: string } = {
+      attack: '공격',
+      skill: '스킬',
+      power: '파워',
+    };
+    return typeText[type] || type;
+  };
+
   return (
     <div className="reward-screen">
       <div className="reward-header">
-        <h1>Victory!</h1>
-        <p>Choose a card to add to your deck</p>
+        <h1>승리!</h1>
+        <p>덱에 추가할 카드를 선택하세요</p>
       </div>
 
       <div className="reward-cards">
@@ -45,18 +63,18 @@ function RewardScreen({ cards, onSelectCard, onSkip }: RewardScreenProps) {
               className="reward-card-rarity"
               style={{ color: getRarityColor(card.rarity) }}
             >
-              {card.rarity}
+              {getRarityText(card.rarity)}
             </div>
             <div className="reward-card-cost">{card.cost}</div>
             <div className="reward-card-name">{card.name}</div>
             <div className="reward-card-description">{card.description}</div>
-            <div className="reward-card-type">{card.type}</div>
+            <div className="reward-card-type">{getTypeText(card.type)}</div>
           </div>
         ))}
       </div>
 
       <button className="skip-button" onClick={onSkip}>
-        Skip Reward
+        보상 건너뛰기
       </button>
     </div>
   );

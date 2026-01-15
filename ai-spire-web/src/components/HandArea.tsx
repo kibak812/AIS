@@ -18,6 +18,15 @@ function HandArea({ hand, energy, selectedCardId, onSelectCard }: HandAreaProps)
     return colors[type] || colors.attack;
   };
 
+  const getTypeText = (type: string): string => {
+    const typeText: { [key: string]: string } = {
+      attack: '공격',
+      skill: '스킬',
+      power: '파워',
+    };
+    return typeText[type] || type;
+  };
+
   return (
     <div className="hand-area">
       <div className="hand-container">
@@ -37,7 +46,7 @@ function HandArea({ hand, energy, selectedCardId, onSelectCard }: HandAreaProps)
               <div className="card-cost">{card.cost}</div>
               <div className="card-name">{card.name}</div>
               <div className="card-description">{card.description}</div>
-              <div className="card-type">{card.type}</div>
+              <div className="card-type">{getTypeText(card.type)}</div>
             </div>
           );
         })}

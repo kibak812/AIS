@@ -2,27 +2,27 @@ import type { Enemy, EnemyIntent } from './types';
 
 export const ENEMY_TEMPLATES = [
   {
-    name: 'Cultist',
+    name: '광신도',
     maxHp: 48,
     damage: 6,
   },
   {
-    name: 'Jaw Worm',
+    name: '턱벌레',
     maxHp: 42,
     damage: 11,
   },
   {
-    name: 'Louse',
+    name: '이',
     maxHp: 12,
     damage: 6,
   },
   {
-    name: 'Fat Gremlin',
+    name: '뚱보 그렘린',
     maxHp: 14,
     damage: 4,
   },
   {
-    name: 'Slime',
+    name: '슬라임',
     maxHp: 30,
     damage: 8,
   },

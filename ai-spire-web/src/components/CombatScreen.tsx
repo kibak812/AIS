@@ -24,7 +24,7 @@ function CombatScreen({
   return (
     <div className="combat-screen">
       <div className="combat-header">
-        <div className="floor-info">Floor {gameState.floor}</div>
+        <div className="floor-info">{gameState.floor}층</div>
         <PlayerInfo player={gameState.player} />
       </div>
 
@@ -36,7 +36,7 @@ function CombatScreen({
 
       <div className="combat-footer">
         <button className="end-turn-button" onClick={onEndTurn}>
-          End Turn
+          턴 종료
         </button>
       </div>
 

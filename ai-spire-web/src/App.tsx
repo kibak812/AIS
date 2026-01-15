@@ -88,15 +88,15 @@ function App() {
   if (gameState.player.currentHp <= 0) {
     return (
       <div className="game-over">
-        <h1>Game Over</h1>
-        <p>You reached Floor {gameState.floor}</p>
+        <h1>게임 오버</h1>
+        <p>{gameState.floor}층까지 도달했습니다</p>
         <button
           onClick={() => {
             const newState = createInitialGameState();
             setGameState({ ...newState, rewardCards: [] });
           }}
         >
-          Restart
+          다시 시작
         </button>
       </div>
     );
