@@ -1,0 +1,116 @@
+.enemy-area {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
+.enemy-card {
+  position: relative;
+  width: 140px;
+  padding: 15px;
+  background: linear-gradient(135deg, rgba(139, 0, 0, 0.8) 0%, rgba(178, 34, 34, 0.8) 100%);
+  border-radius: 15px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.enemy-card:active {
+  transform: scale(0.95);
+}
+
+.enemy-card.selected {
+  border-color: #ffd700;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+}
+
+.enemy-intent {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.intent-icon {
+  font-size: 18px;
+}
+
+.intent-amount {
+  font-size: 14px;
+  font-weight: bold;
+  color: #ff6b6b;
+}
+
+.enemy-sprite {
+  font-size: 60px;
+  margin: 10px 0;
+}
+
+.enemy-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+}
+
+.enemy-health-bar {
+  position: relative;
+  width: 100%;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.enemy-health-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff4757 0%, #ff6348 100%);
+  transition: width 0.3s ease;
+}
+
+.enemy-health-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+}
+
+.enemy-status-effects {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.enemy-status-effect {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 8px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  font-size: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
